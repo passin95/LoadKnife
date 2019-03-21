@@ -71,14 +71,14 @@ public class LoadService {
         }
     }
 
-    public void showCallback(Object states) {
+    public void showCallback(Object state) {
         try {
-            Class<? extends Callback> callback = mLoadKnife.callbackConverter(states);
+            Class<? extends Callback> callback = mLoadKnife.callbackConverter(state);
             if (callback != null) {
                 mLoadLayout.showCallback(callback);
                 return;
             }
-            throw new Exception("converter " + states.getClass().getSimpleName() + " fail.");
+            throw new Exception("converter " + state.getClass().getSimpleName() + " fail.");
         } catch (Exception e) {
             if (LoadKnife.isDebug) {
                 Log.e("LoadKnife", e.toString());
@@ -89,12 +89,24 @@ public class LoadService {
         }
     }
 
-    public LoadLayout getLoadLayout() {
-        return mLoadLayout;
-    }
-
     public void showCallback(Class<? extends Callback> callback) {
         mLoadLayout.showCallback(callback);
+    }
+
+    public ViewHelper getRootViewHelper(Object state) {
+        try {
+            Class<? extends Callback> callback = mLoadKnife.callbackConverter(state);
+            if (callback != null) {
+                return mLoadLayout.getViewHelper(callback);
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    public ViewHelper getRootViewHelper(Class<? extends Callback> callback) {
+        return mLoadLayout.getViewHelper(callback);
     }
 
     public LoadService setCallBack(Class<? extends Callback> callback, Transform transport) {
@@ -102,5 +114,8 @@ public class LoadService {
         return this;
     }
 
+    public LoadLayout getLoadLayout() {
+        return mLoadLayout;
+    }
 
 }

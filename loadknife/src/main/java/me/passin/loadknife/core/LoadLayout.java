@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.SuccessCallback;
 import me.passin.loadknife.utils.LoadKnifeUtils;
@@ -24,7 +25,7 @@ public class LoadLayout extends FrameLayout {
         callbacks.put(SuccessCallback.class, SUCCESS_CALLBACK);
     }
 
-    private Map<Class<? extends Callback>, ServiceView> mServiceViewMap = new HashMap<>();
+    private Map<Class<? extends Callback>, ServiceView> mServiceViewMap = new ConcurrentHashMap<>();
     private Context context;
     private Callback.OnReloadListener onReloadListener;
     private Class<? extends Callback> curCallback;
@@ -95,6 +96,7 @@ public class LoadLayout extends FrameLayout {
 
                     serviceView = new ServiceView(rootView, viewHelper, callback, onReloadListener);
                     serviceView.onViewCreate();
+                    mServiceViewMap.put(callbackClass, serviceView);
                 } catch (IllegalAccessException e) {
                     throw new IllegalArgumentException(
                             "Please provide a constructor without parameters in " + callbackClass.getSimpleName()
@@ -106,7 +108,6 @@ public class LoadLayout extends FrameLayout {
                 }
             }
         }
-
         return serviceView;
     }
 
@@ -122,6 +123,10 @@ public class LoadLayout extends FrameLayout {
         for (Callback callback : callbacks) {
             LoadLayout.callbacks.put(callback.getClass(), callback);
         }
+    }
+
+    public ViewHelper getViewHelper(Class<? extends Callback> callback) {
+        return mServiceViewMap.get(callback).getViewHelper();
     }
 
 }
