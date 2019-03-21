@@ -1,0 +1,21 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "me.passin.loadknife.sample"
+        minSdkVersion rootProject.ext.minSdkVersion
+
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation rootProject.ext.appCompat
+    implementation project(':loadknife')
+    implementation('com.airbnb.android:lottie:2.2.5') { exclude group: 'com.android.support' }
+}

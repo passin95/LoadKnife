@@ -1,0 +1,15 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+    }
+}
+
+dependencies {
+    implementation rootProject.ext.supportAnnotations
+}
+
+apply from: "$rootDir/gradle/gradle-mvn-push.gradle"
