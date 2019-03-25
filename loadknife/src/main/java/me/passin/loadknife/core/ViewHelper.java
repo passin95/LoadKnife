@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author: zbb 33775
@@ -34,6 +36,7 @@ public class ViewHelper {
     private View mRootView;
     private OnClickListener onClickListener;
     private OnLongClickListener onLongClickListener;
+    private Map<String, Object> mDataMap;
 
     public ViewHelper(View rootView) {
         mRootView = rootView;
@@ -440,6 +443,26 @@ public class ViewHelper {
             views.put(viewId, view);
         }
         return (T) view;
+    }
+
+    /**
+     * 用于在不同状态中传递数据
+     */
+    public void putData(String key, Object value) {
+        if (mDataMap == null) {
+            mDataMap = new HashMap();
+        }
+        mDataMap.put(key, value);
+    }
+
+    /**
+     * 用于在不同状态中传递数据
+     */
+    public Object getData(String key) {
+        if (mDataMap == null) {
+            mDataMap = new HashMap();
+        }
+        return mDataMap.get(key);
     }
 
     public View getRootView() {

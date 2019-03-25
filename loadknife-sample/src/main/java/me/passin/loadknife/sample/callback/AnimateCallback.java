@@ -11,8 +11,6 @@ import me.passin.loadknife.sample.R;
 
 public class AnimateCallback extends EmptyCallback {
 
-    private View animateView;
-
     @Override
     public int getLayoutId() {
         return R.layout.callback_animate;
@@ -20,7 +18,7 @@ public class AnimateCallback extends EmptyCallback {
 
     @Override
     public void onAttach(Context context, ViewHelper viewHelper) {
-        animateView = viewHelper.getView(R.id.view_animate);
+        View animateView = viewHelper.getView(R.id.view_animate);
         Animation animation = new RotateAnimation(0, 359, Animation.RELATIVE_TO_SELF,
                 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(1000);
@@ -33,10 +31,11 @@ public class AnimateCallback extends EmptyCallback {
 
     @Override
     public void onDetach(Context context, ViewHelper viewHelper) {
+        View animateView = viewHelper.getView(R.id.view_animate);
         if (animateView != null) {
             animateView.clearAnimation();
+            Toast.makeText(context.getApplicationContext(), "stop animation", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(context.getApplicationContext(), "stop animation", Toast.LENGTH_SHORT).show();
     }
 
 }
