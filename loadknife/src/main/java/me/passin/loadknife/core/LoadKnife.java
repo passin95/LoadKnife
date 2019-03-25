@@ -10,7 +10,7 @@ import me.passin.loadknife.callback.Callback;
 /**
  * @author: zbb 33775
  * @date: 2019/3/19 15:17
- * @desc:
+ * @desc: 可自行选择在外部定义一个容器去管理多个 LoadKnife。
  */
 public class LoadKnife {
 
@@ -117,7 +117,11 @@ public class LoadKnife {
         }
 
         public void initializeDefault() {
-            LoadKnife = new LoadKnife(this);
+            if (LoadKnife != null && isDebug) {
+                throw new IllegalArgumentException("already init default LoadKnife");
+            } else {
+                LoadKnife = new LoadKnife(this);
+            }
         }
 
         public LoadKnife build() {

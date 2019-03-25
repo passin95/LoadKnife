@@ -6,22 +6,16 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Toast;
-import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.core.ViewHelper;
 import me.passin.loadknife.sample.R;
 
-public class AnimateCallback implements Callback {
+public class AnimateCallback extends EmptyCallback {
 
     private View animateView;
 
     @Override
     public int getLayoutId() {
         return R.layout.callback_animate;
-    }
-
-    @Override
-    public void onViewCreate(Context context, ViewHelper viewHelper) {
-
     }
 
     @Override
@@ -45,8 +39,4 @@ public class AnimateCallback implements Callback {
         Toast.makeText(context.getApplicationContext(), "stop animation", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public boolean successViewVisible() {
-        return false;
-    }
 }

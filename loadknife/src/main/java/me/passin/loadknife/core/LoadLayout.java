@@ -19,16 +19,11 @@ import me.passin.loadknife.utils.LoadKnifeUtils;
 public class LoadLayout extends FrameLayout {
 
     private static final Map<Class<? extends Callback>, Callback> callbacks = new HashMap<>();
-    private static final SuccessCallback SUCCESS_CALLBACK = new SuccessCallback();
-
-    static {
-        callbacks.put(SuccessCallback.class, SUCCESS_CALLBACK);
-    }
 
     private Map<Class<? extends Callback>, ServiceView> mServiceViewMap = new ConcurrentHashMap<>();
     private Context context;
     private Callback.OnReloadListener onReloadListener;
-    private Class<? extends Callback> curCallback;
+    private Class<? extends Callback> curCallbackClass;
 
     public LoadLayout(@NonNull Context context) {
         super(context);
@@ -41,7 +36,7 @@ public class LoadLayout extends FrameLayout {
     }
 
     public void initSuccessView(View view) {
-        mServiceViewMap.put(SuccessCallback.class, new ServiceView(view, SUCCESS_CALLBACK));
+        mServiceViewMap.put(SuccessCallback.class, new ServiceView(view));
         addView(view);
     }
 
@@ -59,54 +54,63 @@ public class LoadLayout extends FrameLayout {
     }
 
     public Class<? extends Callback> getCurrentCallback() {
-        return curCallback;
+        return curCallbackClass;
     }
 
-    private void showCallbackView(Class<? extends Callback> callback) {
-        if (curCallback == callback) {
+    private void showCallbackView(Class<? extends Callback> precallbackClass) {
+        if (curCallbackClass == precallbackClass) {
             return;
         }
         if (getChildCount() > 1) {
-            ServiceView curServiceView = getServiceView(curCallback);
-            curServiceView.onDetach();
+            Callback curCallback = getCallback(curCallbackClass);
+            curCallback.onDetach(context,getServiceView(curCallbackClass).getViewHelper());
             removeViewAt(1);
         }
-        ServiceView preServiceView = getServiceView(callback);
-        if (callback == SuccessCallback.class) {
+        ServiceView preServiceView = getServiceView(precallbackClass);
+        if (precallbackClass == SuccessCallback.class) {
             preServiceView.setVisibility(true);
         } else {
+            Callback preCallback = getCallback(precallbackClass);
             addView(preServiceView.getRootView());
-            getServiceView(SuccessCallback.class).setVisibility(preServiceView.successViewVisible());
-            preServiceView.onAttach();
+            getServiceView(SuccessCallback.class).setVisibility(preCallback.successViewVisible());
+            preCallback.onAttach(context,preServiceView.getViewHelper());
         }
 
-        curCallback = callback;
+        curCallbackClass = precallbackClass;
     }
+
+
+    private Callback getCallback(Class<? extends Callback> callbackClass) {
+        Callback callback = callbacks.get(callbackClass);
+        if (callback == null) {
+            try {
+                callback = callbackClass.newInstance();
+                callbacks.put(callbackClass, callback);
+            } catch (IllegalAccessException e) {
+                throw new IllegalArgumentException(
+                        "Please provide a constructor without parameters in " + callbackClass.getSimpleName()
+                                + ",or add from LoadKnife.Builder.addCallback()");
+            } catch (InstantiationException e) {
+                throw new IllegalArgumentException(
+                        "Please provide a constructor without parameters in " + callbackClass.getSimpleName()
+                                + ",or add from LoadKnife.Builder.addCallback()");
+            }
+        }
+        return callback;
+    }
+
 
     private ServiceView getServiceView(Class<? extends Callback> callbackClass) {
         ServiceView serviceView = mServiceViewMap.get(callbackClass);
         if (serviceView == null) {
-            Callback callback = callbacks.get(callbackClass);
-            if (callback == null) {
-                try {
-                    callback = callbackClass.newInstance();
-                    // 构建 rootView
-                    View rootView = View.inflate(context, callback.getLayoutId(), null);
-                    ViewHelper viewHelper = new ViewHelper(rootView);
+            Callback callback = getCallback(callbackClass);
+            // 构建 rootView
+            View rootView = View.inflate(context,callback.getLayoutId(), null);
+            ViewHelper viewHelper = new ViewHelper(rootView);
 
-                    serviceView = new ServiceView(rootView, viewHelper, callback, onReloadListener);
-                    serviceView.onViewCreate();
-                    mServiceViewMap.put(callbackClass, serviceView);
-                } catch (IllegalAccessException e) {
-                    throw new IllegalArgumentException(
-                            "Please provide a constructor without parameters in " + callbackClass.getSimpleName()
-                                    + ",or add from LoadKnife.Builder.addCallback()");
-                } catch (InstantiationException e) {
-                    throw new IllegalArgumentException(
-                            "Please provide a constructor without parameters in " + callbackClass.getSimpleName()
-                                    + ",or add from LoadKnife.Builder.addCallback()");
-                }
-            }
+            serviceView = new ServiceView(rootView, viewHelper, onReloadListener);
+            callback.onViewCreate(context,viewHelper);
+            mServiceViewMap.put(callbackClass, serviceView);
         }
         return serviceView;
     }
