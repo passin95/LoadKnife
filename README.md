@@ -1,6 +1,134 @@
 # LoadKnife
-优雅地处理加载中，重试，无数据等
 
+高性能、高拓展地处理加载中，重试，无数据等界面切换。
+
+## Usage
+
+更多使用方式请参考 loadknife-sample。
+
+注：此框架的 Callback 作为转接者和视图创建数据来源使用，在全局运行期间是单例的。
+
+### 初始化
+
+```java
+LoadKnife.newBuilder()
+        // 无构造参数的 Callback 可不用手动添加，内部会懒加载反射实例化，且只会实例化一次。
+        .addCallback(new TimeoutCallback())
+        // 替换后默认显示视图
+        .defaultCallback(LoadingCallback.class)
+        // 转换失败时显示的视图
+        .errorCallback(ErrorCallback.class)
+        // 类型转换器
+        .addConvertor(StateConvertor.create())
+        // 初始化默认的 LoadKnife 对象，可调用 build() 构建一个新的 LoadKnife。
+        .initializeDefault();
+```
+
+### Callback 配置
+
+```java
+public class AnimateCallback extends EmptyCallback {
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.callback_animate;
+    }
+ 
+    // 不能提取方法的局部变量作为类成员变量，Callback 仅仅转为转接者使用。
+    @Override
+    public void onAttach(Context context, ViewHelper viewHelper) {
+        View animateView = viewHelper.getView(R.id.view_animate);
+        Animation animation = new RotateAnimation(0, 359, Animation.RELATIVE_TO_SELF,
+                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(1000);
+        animation.setRepeatCount(Integer.MAX_VALUE);
+        animation.setFillAfter(true);
+        animation.setInterpolator(new LinearInterpolator());
+        animateView.startAnimation(animation);
+        Toast.makeText(context.getApplicationContext(), "start animation", Toast.LENGTH_SHORT).show();
+    }
+
+    // 不能提取方法的局部变量作为类成员变量，Callback 仅仅转为转接者使用。
+    @Override
+    public void onDetach(Context context, ViewHelper viewHelper) {
+        View animateView = viewHelper.getView(R.id.view_animate);
+        if (animateView != null) {
+            animateView.clearAnimation();
+            Toast.makeText(context.getApplicationContext(), "stop animation", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+}
+```
+
+### 动态修改界面
+
+```java
+mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
+    @Override
+    public void onReload(View v) {
+        // 重新加载逻辑
+    }
+}).setCallBack(EmptyCallback.class, new Transform() {
+    @Override
+    public void modify(Context context, ViewHelper viewHelper) {
+        // 修改 view
+    }
+});
+
+//or
+ViewHelper viewHelper = mLoadService.getViewHelper(EmptyCallback.class);
+```
+
+### 注册
+
+Activity 中使用
+
+```java
+mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
+    @Override
+    public void onReload(View v) {
+        // 重新加载逻辑
+    }
+});
+```
+
+View 中使用
+
+```java
+mLoadService = LoadKnife.getDefault().register(view, new Callback.OnReloadListener() {
+    @Override
+    public void onReload(View v) {
+        // 重新加载逻辑
+    }
+});
+
+```
+
+Fragment 中使用
+
+```java
+public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    View rootView = View.inflate(getActivity(), R.layout.fragment_a_content, null);
+    loadService = loadKnife.register(rootView, new OnReloadListener() {
+        @Override
+        public void onReload(View v) {
+            
+        }
+    });
+    return loadService.getLoadLayout();
+}
+```
+
+## Installation
+
+```gradle
+implementation 'com.passin.loadknife:0.0.1'
+```
+
+## Thank
+
+本框架参考了 [LoadSir](https://github.com/KingJA/LoadSir) 的设计和 Demo。
 
 ## License
 
