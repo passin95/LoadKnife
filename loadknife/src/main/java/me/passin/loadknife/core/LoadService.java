@@ -93,7 +93,7 @@ public class LoadService {
         mLoadLayout.showCallback(callback);
     }
 
-    public ViewHelper getRootViewHelper(Object state) {
+    public ViewHelper getViewHelper(Object state) {
         try {
             Class<? extends Callback> callback = mLoadKnife.callbackConverter(state);
             if (callback != null) {
@@ -105,11 +105,30 @@ public class LoadService {
         return null;
     }
 
-    public ViewHelper getRootViewHelper(Class<? extends Callback> callback) {
+    public ViewHelper getViewHelper(Class<? extends Callback> callback) {
         return mLoadLayout.getViewHelper(callback);
     }
 
+    public LoadService setCallBack(Object state, Transform transport) {
+        Class<? extends Callback> callback = null;
+        try {
+            callback = mLoadKnife.callbackConverter(state);
+        } catch (Exception e) {
+            if (LoadKnife.isDebug) {
+                Log.e("LoadKnife", e.toString());
+            }
+            if (mLoadKnife.mErrorCallback != null) {
+                mLoadLayout.showCallback(mLoadKnife.mErrorCallback);
+            }
+        }
+        setCallBack(callback, transport);
+        return this;
+    }
+
     public LoadService setCallBack(Class<? extends Callback> callback, Transform transport) {
+        if (callback == null || transport == null) {
+            return this;
+        }
         mLoadLayout.setCallBack(callback, transport);
         return this;
     }

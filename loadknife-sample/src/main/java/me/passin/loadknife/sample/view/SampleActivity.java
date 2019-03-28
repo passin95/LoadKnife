@@ -43,7 +43,7 @@ public class SampleActivity  extends AppCompatActivity {
             }
         });
         PostUtil.postCallbackDelayed(mLoadService,ErrorCallback.class);
-        ViewHelper rootViewHelper = mLoadService.getRootViewHelper(ErrorCallback.class);
+        ViewHelper rootViewHelper = mLoadService.getViewHelper(ErrorCallback.class);
         rootViewHelper.setText(R.id.tv_error_hint, "I am modify error hint")
                 .setTextColor(R.id.tv_error_hint, Color.BLUE);
     }
