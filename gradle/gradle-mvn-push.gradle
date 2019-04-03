@@ -3,9 +3,6 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 Properties localProperties = new Properties()
 
-version = rootProject.ext.versionName
-group = "me.passin"
-
 try {
     def localFile = project.rootProject.file('local.properties')
     if (localFile != null && localFile.exists()) {
@@ -19,7 +16,7 @@ def gitUrl = 'https://github.com/passin95/LoadKnife.git'   // Git仓库的url
 def siteUrl = 'https://github.com/passin95/LoadKnife'
 
 version = rootProject.ext.versionName
-group = "com.passin"
+group = "me.passin"
 
 
 bintray {
