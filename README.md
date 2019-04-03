@@ -126,6 +126,12 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 implementation 'com.passin.loadknife:0.0.1'
 ```
 
+## Proguard
+
+```
+-keep public class * extends me.passin.loadknife.callback.Callback
+```
+
 ## Thank
 
 本框架参考了 [LoadSir](https://github.com/KingJA/LoadSir) 的设计和 Demo。
