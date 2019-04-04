@@ -2,7 +2,7 @@
 
 高性能、高拓展地处理加载中，重试，无数据等界面切换。
 
-## Usage
+## 使用方式
 
 更多使用方式请参考 loadknife-sample。
 
@@ -24,7 +24,7 @@ LoadKnife.newBuilder()
         .initializeDefault();
 ```
 
-### Callback 配置
+#### Callback 配置
 
 ```java
 public class AnimateCallback extends EmptyCallback {
@@ -61,7 +61,7 @@ public class AnimateCallback extends EmptyCallback {
 }
 ```
 
-### 动态修改界面
+#### 动态修改界面
 
 ```java
 mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
@@ -80,9 +80,9 @@ mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
 ViewHelper viewHelper = mLoadService.getViewHelper(EmptyCallback.class);
 ```
 
-### 注册
+#### 注册替换视图
 
-Activity 中使用
+##### Activity 中使用
 
 ```java
 mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
@@ -93,7 +93,7 @@ mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
 });
 ```
 
-View 中使用
+##### View 中使用
 
 ```java
 mLoadService = LoadKnife.getDefault().register(view, new Callback.OnReloadListener() {
@@ -105,7 +105,7 @@ mLoadService = LoadKnife.getDefault().register(view, new Callback.OnReloadListen
 
 ```
 
-Fragment 中使用
+###### Fragment 中使用
 
 ```java
 public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -120,19 +120,19 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 }
 ```
 
-## Installation
+## 安装
 
 ```gradle
 implementation 'com.passin.loadknife:0.0.2'
 ```
 
-## Proguard
+## 混淆
 
 ```
 -keep public class * extends me.passin.loadknife.callback.Callback
 ```
 
-## Thank
+## 致谢
 
 本框架参考了 [LoadSir](https://github.com/KingJA/LoadSir) 的设计和 Demo。
 
