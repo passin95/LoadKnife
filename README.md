@@ -123,7 +123,7 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 ## Installation
 
 ```gradle
-implementation 'com.passin.loadknife:0.0.1'
+implementation 'com.passin.loadknife:0.0.2'
 ```
 
 ## Proguard
