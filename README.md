@@ -4,12 +4,6 @@
 
 ## 使用方式
 
-更多使用方式请参考 loadknife-sample。
-
-**注**：
-- 此框架的 Callback 作为转接者和视图创建数据来源使用，在全局运行期间是单例的。
-- Demo 并没有在退出 Activity 或者 fragment 的时候停止 Handler 的延迟 Post，所以在此期间退出会导致内存泄漏，属正常现象。
-
 ### 初始化
 
 ```java
@@ -26,7 +20,7 @@ LoadKnife.newBuilder()
         .initializeDefault();
 ```
 
-#### Callback 配置
+### Callback 配置
 
 ```java
 public class AnimateCallback extends EmptyCallback {
@@ -63,7 +57,7 @@ public class AnimateCallback extends EmptyCallback {
 }
 ```
 
-#### 动态修改界面
+### 动态修改界面
 
 ```java
 mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
@@ -82,9 +76,9 @@ mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
 ViewHelper viewHelper = mLoadService.getViewHelper(EmptyCallback.class);
 ```
 
-#### 注册替换视图
+### 注册替换视图
 
-##### Activity 中使用
+#### Activity 中使用
 
 ```java
 mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
@@ -95,7 +89,7 @@ mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
 });
 ```
 
-##### View 中使用
+#### View 中使用
 
 ```java
 mLoadService = LoadKnife.getDefault().register(view, new Callback.OnReloadListener() {
@@ -107,7 +101,7 @@ mLoadService = LoadKnife.getDefault().register(view, new Callback.OnReloadListen
 
 ```
 
-###### Fragment 中使用
+#### Fragment 中使用
 
 ```java
 public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -121,6 +115,11 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
     return loadService.getLoadLayout();
 }
 ```
+
+## 说明
+
+- 此框架的 Callback 作为转接者和视图创建数据来源使用，在全局运行期间是单例的。
+- Demo 并没有在退出 Activity 或者 fragment 的时候停止 Handler 的延迟 Post，所以在此期间退出会导致内存泄漏，属正常现象。
 
 ## 安装
 
