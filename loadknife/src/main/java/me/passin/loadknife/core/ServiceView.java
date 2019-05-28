@@ -19,7 +19,7 @@ public class ServiceView {
         this(view, new ViewHelper(view), null);
     }
 
-    ServiceView(View view, ViewHelper viewHelper,OnReloadListener onReloadListener) {
+    ServiceView(View view, ViewHelper viewHelper, OnReloadListener onReloadListener) {
         mRootView = view;
         mViewHelper = viewHelper;
         mOnReloadListener = onReloadListener;
@@ -52,4 +52,5 @@ public class ServiceView {
             mRootView.setVisibility(View.INVISIBLE);
         }
     }
+
 }

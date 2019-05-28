@@ -11,17 +11,18 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="4dp"
-        android:background="@drawable/custom" />
+        android:background="@drawable/custom"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="custom page(Callback)"
         android:textColor="#333333"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You can declare your own retry logic!" />
+        android:text="You can declare your own retry logic!"/>
+
 </LinearLayout>

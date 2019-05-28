@@ -8,5 +8,7 @@ import me.passin.loadknife.callback.Callback;
  * @desc: 将一些类型转换为 CallBack
  */
 public interface Convertor<T> {
+
     Class<? extends Callback> convert(T value) throws Exception;
+
 }

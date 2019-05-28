@@ -8,5 +8,7 @@ import android.content.Context;
  * @desc: 修改某个 callback 界面
  */
 public interface Transform {
+
     void modify(Context context, ViewHelper viewHelper);
+
 }

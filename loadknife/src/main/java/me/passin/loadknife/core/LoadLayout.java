@@ -25,14 +25,23 @@ public class LoadLayout extends FrameLayout {
     private Callback.OnReloadListener onReloadListener;
     private Class<? extends Callback> curCallbackClass;
 
-    public LoadLayout(@NonNull Context context) {
-        super(context);
-    }
-
     public LoadLayout(@NonNull Context context, Callback.OnReloadListener onReloadListener) {
         this(context);
         this.context = context;
         this.onReloadListener = onReloadListener;
+    }
+
+    public LoadLayout(@NonNull Context context) {
+        super(context);
+    }
+
+    /**
+     * @hide
+     */
+    public static void addCallback(Callback... callbacks) {
+        for (Callback callback : callbacks) {
+            LoadLayout.callbacks.put(callback.getClass(), callback);
+        }
     }
 
     public void initSuccessView(View view) {
@@ -53,17 +62,13 @@ public class LoadLayout extends FrameLayout {
         }
     }
 
-    public Class<? extends Callback> getCurrentCallback() {
-        return curCallbackClass;
-    }
-
     private void showCallbackView(Class<? extends Callback> precallbackClass) {
         if (curCallbackClass == precallbackClass) {
             return;
         }
         if (getChildCount() > 1) {
             Callback curCallback = getCallback(curCallbackClass);
-            curCallback.onDetach(context,getServiceView(curCallbackClass).getViewHelper());
+            curCallback.onDetach(context, getServiceView(curCallbackClass).getViewHelper());
             removeViewAt(1);
         }
         ServiceView preServiceView = getServiceView(precallbackClass);
@@ -73,7 +78,7 @@ public class LoadLayout extends FrameLayout {
             Callback preCallback = getCallback(precallbackClass);
             addView(preServiceView.getRootView());
             getServiceView(SuccessCallback.class).setVisibility(preCallback.successViewVisible());
-            preCallback.onAttach(context,preServiceView.getViewHelper());
+            preCallback.onAttach(context, preServiceView.getViewHelper());
         }
 
         curCallbackClass = precallbackClass;
@@ -105,28 +110,23 @@ public class LoadLayout extends FrameLayout {
         if (serviceView == null) {
             Callback callback = getCallback(callbackClass);
             // 构建 rootView
-            View rootView = View.inflate(context,callback.getLayoutId(), null);
+            View rootView = View.inflate(context, callback.getLayoutId(), null);
             ViewHelper viewHelper = new ViewHelper(rootView);
 
             serviceView = new ServiceView(rootView, viewHelper, onReloadListener);
-            callback.onViewCreate(context,viewHelper);
+            callback.onViewCreate(context, viewHelper);
             mServiceViewMap.put(callbackClass, serviceView);
         }
         return serviceView;
     }
 
+    public Class<? extends Callback> getCurrentCallback() {
+        return curCallbackClass;
+    }
+
     public void setCallBack(@NonNull Class<? extends Callback> callbackClass, @NonNull Transform transport) {
         ServiceView serviceView = getServiceView(callbackClass);
         transport.modify(context, serviceView.getViewHelper());
-    }
-
-    /**
-     * @hide
-     */
-    public static void addCallback(Callback... callbacks) {
-        for (Callback callback : callbacks) {
-            LoadLayout.callbacks.put(callback.getClass(), callback);
-        }
     }
 
     public ViewHelper getViewHelper(Class<? extends Callback> callback) {

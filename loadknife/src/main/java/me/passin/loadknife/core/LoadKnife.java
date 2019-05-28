@@ -26,6 +26,16 @@ public class LoadKnife {
      */
     private final Class<? extends Callback> mDefaultCallback;
 
+    LoadKnife() {
+        this(new Builder());
+    }
+
+    LoadKnife(Builder builder) {
+        this.mConvertors = unmodifiableList(builder.mConvertors);
+        this.mErrorCallback = builder.mErrorCallback;
+        this.mDefaultCallback = builder.mDefaultCallback;
+    }
+
     public static LoadKnife getDefault() {
         if (LoadKnife == null) {
             synchronized (LoadKnife.class) {
@@ -41,14 +51,8 @@ public class LoadKnife {
         isDebug = true;
     }
 
-    LoadKnife() {
-        this(new Builder());
-    }
-
-    LoadKnife(Builder builder) {
-        this.mConvertors = unmodifiableList(builder.mConvertors);
-        this.mErrorCallback = builder.mErrorCallback;
-        this.mDefaultCallback = builder.mDefaultCallback;
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     public LoadService register(@NonNull Object target) {
@@ -62,10 +66,6 @@ public class LoadKnife {
     public LoadService register(@NonNull Object target, Callback.OnReloadListener onReloadListener,
             Class<? extends Callback> defaultCallback) {
         return new LoadService(this, target, defaultCallback, onReloadListener);
-    }
-
-    public static Builder newBuilder() {
-        return new Builder();
     }
 
     public Class<? extends Callback> callbackConverter(Object o) throws Exception {
@@ -129,4 +129,5 @@ public class LoadKnife {
         }
 
     }
+
 }

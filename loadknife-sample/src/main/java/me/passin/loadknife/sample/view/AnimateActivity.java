@@ -22,7 +22,7 @@ public class AnimateActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
-        LoadKnife loadSir =  LoadKnife.newBuilder()
+        LoadKnife loadSir = LoadKnife.newBuilder()
                 .defaultCallback(AnimateCallback.class)
                 .build();
         loadService = loadSir.register(this, new Callback.OnReloadListener() {
@@ -40,4 +40,5 @@ public class AnimateActivity extends AppCompatActivity {
         });
         PostUtil.postCallbackDelayed(loadService, EmptyCallback.class, 1000);
     }
+
 }

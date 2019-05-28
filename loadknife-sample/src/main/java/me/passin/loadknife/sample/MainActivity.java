@@ -48,4 +48,5 @@ public class MainActivity extends AppCompatActivity {
     public void convertor(View view) {
         startActivity(new Intent(this, ConvertorActivity.class));
     }
+
 }

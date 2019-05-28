@@ -20,7 +20,7 @@ import me.passin.loadknife.sample.callback.ErrorCallback;
  * @date: 2019/3/21 14:29
  * @desc:
  */
-public class SampleActivity  extends AppCompatActivity {
+public class SampleActivity extends AppCompatActivity {
 
     private LoadService mLoadService;
 
@@ -42,9 +42,10 @@ public class SampleActivity  extends AppCompatActivity {
                         .setTextColor(R.id.tv_error, Color.RED);
             }
         });
-        PostUtil.postCallbackDelayed(mLoadService,ErrorCallback.class);
+        PostUtil.postCallbackDelayed(mLoadService, ErrorCallback.class);
         ViewHelper rootViewHelper = mLoadService.getViewHelper(ErrorCallback.class);
         rootViewHelper.setText(R.id.tv_error_hint, "I am modify error hint")
                 .setTextColor(R.id.tv_error_hint, Color.BLUE);
     }
+
 }

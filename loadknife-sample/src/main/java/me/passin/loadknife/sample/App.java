@@ -2,10 +2,10 @@ package me.passin.loadknife.sample;
 
 import android.app.Application;
 import android.os.StrictMode;
+import me.passin.loadknife.core.LoadKnife;
 import me.passin.loadknife.sample.callback.ErrorCallback;
 import me.passin.loadknife.sample.callback.LoadingCallback;
 import me.passin.loadknife.sample.convertor.StateConvertor;
-import me.passin.loadknife.core.LoadKnife;
 
 /**
  * @author: zbb 33775
@@ -25,4 +25,5 @@ public class App extends Application {
                 .initializeDefault();
         StrictMode.enableDefaults();
     }
+
 }

@@ -12,9 +12,8 @@ import me.passin.loadknife.core.LoadService;
  */
 public class PostUtil {
 
-    private static Handler H = new Handler(Looper.getMainLooper());
-
     private static final int DELAY_TIME = 1500;
+    private static Handler H = new Handler(Looper.getMainLooper());
 
     public static void postCallbackDelayed(final LoadService loadService, final Class<? extends Callback> clazz) {
         postCallbackDelayed(loadService, clazz, DELAY_TIME);
@@ -47,8 +46,8 @@ public class PostUtil {
         H.post(runnable);
     }
 
-
     public static void postDelayed(Runnable runnable, long delayMillis) {
         H.postDelayed(runnable, delayMillis);
     }
+
 }

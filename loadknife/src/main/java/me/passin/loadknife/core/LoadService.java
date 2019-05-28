@@ -61,14 +61,14 @@ public class LoadService {
         }
     }
 
-    public void showSuccess() {
-        mLoadLayout.showCallback(SuccessCallback.class);
-    }
-
     public void showDefault() {
         if (mDefaultCallback != null) {
             mLoadLayout.showCallback(mDefaultCallback);
         }
+    }
+
+    public void showSuccess() {
+        mLoadLayout.showCallback(SuccessCallback.class);
     }
 
     public void showCallback(Object state) {
