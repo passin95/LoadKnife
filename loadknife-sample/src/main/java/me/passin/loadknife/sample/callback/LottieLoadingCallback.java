@@ -9,5 +9,4 @@ public class LottieLoadingCallback extends Callback {
     public int getLayoutId() {
         return R.layout.callback_lottie_loading;
     }
-
 }

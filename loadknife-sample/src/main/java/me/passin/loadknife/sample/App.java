@@ -25,5 +25,4 @@ public class App extends Application {
                 .initializeDefault();
         StrictMode.enableDefaults();
     }
-
 }

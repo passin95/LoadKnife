@@ -14,5 +14,4 @@ public class LoadingCallback extends Callback {
     public int getLayoutId() {
         return R.layout.callback_loading;
     }
-
 }

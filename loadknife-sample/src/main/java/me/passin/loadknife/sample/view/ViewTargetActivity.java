@@ -30,7 +30,6 @@ public class ViewTargetActivity extends AppCompatActivity {
             @Override
             public void onReload(View v) {
                 loadService.showCallback(LoadingCallback.class);
-                //do retry logic...
 
                 PostUtil.postSuccessDelayed(loadService);
             }

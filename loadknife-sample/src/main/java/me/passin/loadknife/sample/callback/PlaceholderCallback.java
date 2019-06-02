@@ -9,5 +9,4 @@ public class PlaceholderCallback extends Callback {
     public int getLayoutId() {
         return R.layout.callback_placeholder;
     }
-
 }

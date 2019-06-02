@@ -34,5 +34,4 @@ public class LottieActivity extends AppCompatActivity {
         });
         PostUtil.postCallbackDelayed(loadService, LottieEmptyCallback.class);
     }
-
 }

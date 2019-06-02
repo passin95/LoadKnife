@@ -12,5 +12,4 @@ public class SingleFragmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fragment);
         getSupportFragmentManager().beginTransaction().add(R.id.fl_content, NormalFragment.newInstance()).commit();
     }
-
 }

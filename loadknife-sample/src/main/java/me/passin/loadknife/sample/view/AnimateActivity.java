@@ -32,7 +32,7 @@ public class AnimateActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         loadService.showCallback(AnimateCallback.class);
-                        SystemClock.sleep(500);
+                        SystemClock.sleep(1000);
                         loadService.showSuccess();
                     }
                 }).start();
@@ -40,5 +40,4 @@ public class AnimateActivity extends AppCompatActivity {
         });
         PostUtil.postCallbackDelayed(loadService, EmptyCallback.class, 1000);
     }
-
 }

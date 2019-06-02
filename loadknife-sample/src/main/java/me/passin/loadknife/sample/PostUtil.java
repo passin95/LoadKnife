@@ -49,5 +49,4 @@ public class PostUtil {
     public static void postDelayed(Runnable runnable, long delayMillis) {
         H.postDelayed(runnable, delayMillis);
     }
-
 }

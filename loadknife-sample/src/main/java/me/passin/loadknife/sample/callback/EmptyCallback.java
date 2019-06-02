@@ -14,5 +14,4 @@ public class EmptyCallback extends Callback {
     public int getLayoutId() {
         return R.layout.callback_empty;
     }
-
 }

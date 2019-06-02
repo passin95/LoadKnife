@@ -14,5 +14,4 @@ public class UnknowCallback extends Callback {
     public int getLayoutId() {
         return R.layout.callback_lottie_empty;
     }
-
 }

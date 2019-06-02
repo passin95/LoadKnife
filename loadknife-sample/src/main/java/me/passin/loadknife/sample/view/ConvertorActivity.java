@@ -9,7 +9,7 @@ import me.passin.loadknife.core.LoadKnife;
 import me.passin.loadknife.core.LoadService;
 import me.passin.loadknife.sample.PostUtil;
 import me.passin.loadknife.sample.R;
-import me.passin.loadknife.sample.convertor.State;
+import me.passin.loadknife.sample.convertor.ViewState;
 
 /**
  * @author: zbb 33775
@@ -27,16 +27,15 @@ public class ConvertorActivity extends AppCompatActivity {
         mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
             @Override
             public void onReload(View v) {
-                mLoadService.showCallback(State.UNKNOWN);
+                mLoadService.showCallback(ViewState.UNKNOWN);
                 PostUtil.postSuccessDelayed(mLoadService, 8000);
             }
         });
         PostUtil.post(new Runnable() {
             @Override
             public void run() {
-                mLoadService.showCallback(State.ERROR);
+                mLoadService.showCallback(ViewState.ERROR);
             }
         });
     }
-
 }
