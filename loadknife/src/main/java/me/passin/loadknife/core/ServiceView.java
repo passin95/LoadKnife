@@ -52,5 +52,4 @@ public class ServiceView {
             mRootView.setVisibility(View.INVISIBLE);
         }
     }
-
 }

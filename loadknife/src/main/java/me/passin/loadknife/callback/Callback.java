@@ -9,7 +9,7 @@ import me.passin.loadknife.core.ViewHelper;
  * @author: zbb 33775
  * @date: 2019/3/20 21:39
  * @desc: Callback 只作为一个数据的转接者，是被多个界面共用的，
- * 因此不要在实现类存该接口方法的参数。
+ * 因此实现类的变量是共用的。
  */
 public abstract class Callback {
 
@@ -47,7 +47,5 @@ public abstract class Callback {
     public interface OnReloadListener {
 
         void onReload(View v);
-
     }
-
 }

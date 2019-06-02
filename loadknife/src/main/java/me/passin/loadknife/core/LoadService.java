@@ -2,12 +2,14 @@ package me.passin.loadknife.core;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.Callback.OnReloadListener;
 import me.passin.loadknife.callback.SuccessCallback;
+import me.passin.loadknife.utils.Preconditions;
 
 /**
  * @author: zbb 33775
@@ -71,36 +73,31 @@ public class LoadService {
         mLoadLayout.showCallback(SuccessCallback.class);
     }
 
-    public void showCallback(Object state) {
-        try {
-            Class<? extends Callback> callback = mLoadKnife.callbackConverter(state);
-            if (callback != null) {
-                mLoadLayout.showCallback(callback);
-                return;
-            }
-            throw new Exception("converter " + state.getClass().getSimpleName() + " fail.");
-        } catch (Exception e) {
-            if (LoadKnife.isDebug) {
-                Log.e("LoadKnife", e.toString());
-            }
-            if (mLoadKnife.mErrorCallback != null) {
-                mLoadLayout.showCallback(mLoadKnife.mErrorCallback);
-            }
+    public void showCallback(@NonNull Object state) {
+        Preconditions.checkNotNull(state, "state == null");
+        Class<? extends Callback> callback = mLoadKnife.callbackConverter(state);
+        if (callback != null) {
+            mLoadLayout.showCallback(callback);
+        } else {
+            mLoadLayout.showCallback(mLoadKnife.mErrorCallback);
         }
     }
 
-    public void showCallback(Class<? extends Callback> callback) {
+    public void showCallback(@NonNull Class<? extends Callback> callback) {
+        Preconditions.checkNotNull(callback, "state == null");
         mLoadLayout.showCallback(callback);
     }
 
-    public ViewHelper getViewHelper(Object state) {
-        try {
-            Class<? extends Callback> callback = mLoadKnife.callbackConverter(state);
-            if (callback != null) {
-                return mLoadLayout.getViewHelper(callback);
-            }
-        } catch (Exception e) {
-            return null;
+    /**
+     * 当传入的 state 无法被转换为 Callback 时 返回 null。
+     */
+    @Nullable
+    public ViewHelper getViewHelper(@NonNull Object state) {
+        Preconditions.checkNotNull(state, "state == null");
+
+        Class<? extends Callback> callback = mLoadKnife.callbackConverter(state);
+        if (callback != null) {
+            return mLoadLayout.getViewHelper(callback);
         }
         return null;
     }
@@ -109,32 +106,7 @@ public class LoadService {
         return mLoadLayout.getViewHelper(callback);
     }
 
-    public LoadService setCallBack(Object state, Transform transport) {
-        Class<? extends Callback> callback = null;
-        try {
-            callback = mLoadKnife.callbackConverter(state);
-        } catch (Exception e) {
-            if (LoadKnife.isDebug) {
-                Log.e("LoadKnife", e.toString());
-            }
-            if (mLoadKnife.mErrorCallback != null) {
-                mLoadLayout.showCallback(mLoadKnife.mErrorCallback);
-            }
-        }
-        setCallBack(callback, transport);
-        return this;
-    }
-
-    public LoadService setCallBack(Class<? extends Callback> callback, Transform transport) {
-        if (callback == null || transport == null) {
-            return this;
-        }
-        mLoadLayout.setCallBack(callback, transport);
-        return this;
-    }
-
     public LoadLayout getLoadLayout() {
         return mLoadLayout;
     }
-
 }

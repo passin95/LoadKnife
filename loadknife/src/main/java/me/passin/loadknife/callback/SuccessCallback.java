@@ -11,5 +11,4 @@ public class SuccessCallback extends Callback {
     public int getLayoutId() {
         return 0;
     }
-
 }

@@ -1,8 +1,10 @@
 package me.passin.loadknife.core;
 
 import static java.util.Collections.unmodifiableList;
+import static me.passin.loadknife.utils.Preconditions.checkNotNull;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import me.passin.loadknife.callback.Callback;
@@ -14,11 +16,10 @@ import me.passin.loadknife.callback.Callback;
  */
 public class LoadKnife {
 
-    static boolean isDebug = false;
-    static volatile LoadKnife LoadKnife;
+    private static volatile LoadKnife mLoadKnife;
     final List<Convertor> mConvertors;
     /**
-     * 内部抛出可控异常时展示的页面
+     * 内部抛出可控异常时展示的页面，例如 Convertor 转换失败。
      */
     final Class<? extends Callback> mErrorCallback;
     /**
@@ -37,18 +38,23 @@ public class LoadKnife {
     }
 
     public static LoadKnife getDefault() {
-        if (LoadKnife == null) {
+        if (mLoadKnife == null) {
             synchronized (LoadKnife.class) {
-                if (LoadKnife == null) {
-                    LoadKnife = new LoadKnife();
+                if (mLoadKnife == null) {
+                    mLoadKnife = new LoadKnife();
                 }
             }
         }
-        return LoadKnife;
+        return mLoadKnife;
     }
 
-    public static void openDebug() {
-        isDebug = true;
+    /**
+     * 主要适用于构造函数含有参数的 callback，多次添加会覆盖。
+     * 无参 Callback 可选择不添加，内部会通过懒加载反射初始化。
+     */
+    public static void addCallback(@NonNull Callback... callback) {
+        checkNotNull(callback, "callback == null");
+        LoadLayout.addCallback(callback);
     }
 
     public static Builder newBuilder() {
@@ -59,16 +65,17 @@ public class LoadKnife {
         return register(target, null);
     }
 
-    public LoadService register(@NonNull Object target, Callback.OnReloadListener onReloadListener) {
+    public LoadService register(@NonNull Object target, @Nullable Callback.OnReloadListener onReloadListener) {
         return register(target, onReloadListener, mDefaultCallback);
     }
 
-    public LoadService register(@NonNull Object target, Callback.OnReloadListener onReloadListener,
-            Class<? extends Callback> defaultCallback) {
+    public LoadService register(@NonNull Object target, @Nullable Callback.OnReloadListener onReloadListener,
+            @Nullable Class<? extends Callback> defaultCallback) {
         return new LoadService(this, target, defaultCallback, onReloadListener);
     }
 
-    public Class<? extends Callback> callbackConverter(Object o) throws Exception {
+    @SuppressWarnings("unchecked")
+    public Class<? extends Callback> callbackConverter(Object o) {
         for (Convertor convertor : mConvertors) {
             try {
                 Class<? extends Callback> callBack = convertor.convert(o);
@@ -76,8 +83,7 @@ public class LoadKnife {
                     return callBack;
                 }
             } catch (Exception e) {
-                throw new Exception(String.format("%s convertor %o fail", Convertor.class.getSimpleName(),
-                        o.getClass().getSimpleName()));
+                // ignore
             }
         }
         return null;
@@ -90,11 +96,13 @@ public class LoadKnife {
         private Class<? extends Callback> mErrorCallback;
 
         public Builder addConvertor(@NonNull Convertor convertor) {
+            checkNotNull(convertor, "convertor == null");
             mConvertors.add(convertor);
             return this;
         }
 
         public Builder defaultCallback(@NonNull Class<? extends Callback> defaultCallback) {
+            checkNotNull(defaultCallback, "defaultCallback == null");
             mDefaultCallback = defaultCallback;
             return this;
         }
@@ -103,31 +111,21 @@ public class LoadKnife {
          * 内部抛出可控异常显示的界面，不设置则默认不处理。
          */
         public Builder errorCallback(@NonNull Class<? extends Callback> errorCallback) {
+            checkNotNull(errorCallback, "errorCallback == null");
             mErrorCallback = errorCallback;
             return this;
         }
 
-        /**
-         * 主要适用于构造函数含有参数的 callback，多次添加会覆盖。
-         * 无参 Callback 可选择不添加，内部会通过懒加载反射初始化。
-         */
-        public Builder addCallback(Callback callback) {
-            LoadLayout.addCallback(callback);
-            return this;
-        }
-
         public void initializeDefault() {
-            if (LoadKnife != null && isDebug) {
+            if (mLoadKnife != null) {
                 throw new IllegalArgumentException("already init default LoadKnife");
             } else {
-                LoadKnife = new LoadKnife(this);
+                mLoadKnife = new LoadKnife(this);
             }
         }
 
         public LoadKnife build() {
             return new LoadKnife(this);
         }
-
     }
-
 }

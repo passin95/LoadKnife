@@ -62,8 +62,8 @@ public class LoadLayout extends FrameLayout {
         }
     }
 
-    private void showCallbackView(Class<? extends Callback> precallbackClass) {
-        if (curCallbackClass == precallbackClass) {
+    private void showCallbackView(Class<? extends Callback> preCallbackClass) {
+        if (curCallbackClass == preCallbackClass) {
             return;
         }
         if (getChildCount() > 1) {
@@ -71,17 +71,17 @@ public class LoadLayout extends FrameLayout {
             curCallback.onDetach(context, getServiceView(curCallbackClass).getViewHelper());
             removeViewAt(1);
         }
-        ServiceView preServiceView = getServiceView(precallbackClass);
-        if (precallbackClass == SuccessCallback.class) {
+        ServiceView preServiceView = getServiceView(preCallbackClass);
+        if (preCallbackClass == SuccessCallback.class) {
             preServiceView.setVisibility(true);
         } else {
-            Callback preCallback = getCallback(precallbackClass);
+            Callback preCallback = getCallback(preCallbackClass);
             addView(preServiceView.getRootView());
             getServiceView(SuccessCallback.class).setVisibility(preCallback.successViewVisible());
             preCallback.onAttach(context, preServiceView.getViewHelper());
         }
 
-        curCallbackClass = precallbackClass;
+        curCallbackClass = preCallbackClass;
     }
 
 
@@ -124,13 +124,8 @@ public class LoadLayout extends FrameLayout {
         return curCallbackClass;
     }
 
-    public void setCallBack(@NonNull Class<? extends Callback> callbackClass, @NonNull Transform transport) {
-        ServiceView serviceView = getServiceView(callbackClass);
-        transport.modify(context, serviceView.getViewHelper());
-    }
-
     public ViewHelper getViewHelper(Class<? extends Callback> callback) {
-        return mServiceViewMap.get(callback).getViewHelper();
+        return getServiceView(callback).getViewHelper();
     }
 
 }

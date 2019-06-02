@@ -179,7 +179,6 @@ public class ViewHelper {
 
     public ViewHelper setChecked(@IdRes int viewId, boolean checked) {
         View view = getView(viewId);
-        // View unable cast to Checkable
         if (view instanceof Checkable) {
             ((Checkable) view).setChecked(checked);
         }
@@ -216,9 +215,6 @@ public class ViewHelper {
         for (int id : viewId) {
             final View view = getView(id);
             if (view != null) {
-                if (!view.isClickable()) {
-                    view.setClickable(true);
-                }
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -237,9 +233,6 @@ public class ViewHelper {
         for (int id : viewId) {
             final View view = getView(id);
             if (view != null) {
-                if (!view.isClickable()) {
-                    view.setLongClickable(true);
-                }
                 view.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -265,7 +258,7 @@ public class ViewHelper {
     }
 
     /**
-     * 用于在不同状态中传递数据
+     * 用于在 Callback 的生命周期中传递数据。
      */
     public void putData(String key, Object value) {
         if (mDataMap == null) {
@@ -287,5 +280,4 @@ public class ViewHelper {
     public View getRootView() {
         return mRootView;
     }
-
 }
