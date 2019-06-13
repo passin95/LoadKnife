@@ -127,14 +127,6 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 implementation 'me.passin:loadknife:1.0.0'
 ```
 
-## 混淆
-
-框架默认采用懒加载、反射的方式实例化 Callback 对象，若用户自行实例化添加可不用添加。
-
-```
--keep public class * extends me.passin.loadknife.callback.Callback
-```
-
 ## 致谢
 
 本框架参考了 [LoadSir](https://github.com/KingJA/LoadSir) 的设计和 Demo。
