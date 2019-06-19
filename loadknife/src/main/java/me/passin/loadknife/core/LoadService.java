@@ -74,7 +74,6 @@ public class LoadService {
     }
 
     public void showCallback(@NonNull Object state) {
-        Preconditions.checkNotNull(state, "state == null");
         Class<? extends Callback> callback = mLoadKnife.callbackConverter(state);
         if (callback != null) {
             mLoadLayout.showCallback(callback);
@@ -108,5 +107,9 @@ public class LoadService {
 
     public LoadLayout getLoadLayout() {
         return mLoadLayout;
+    }
+
+    public Class<? extends Callback> getCurrentCallback() {
+        return mLoadLayout.getCurrentCallback();
     }
 }

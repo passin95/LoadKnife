@@ -219,8 +219,7 @@ public class ViewHelper {
                     @Override
                     public void onClick(View v) {
                         if (onClickListener != null) {
-                            onClickListener
-                                    .onClick(v);
+                            onClickListener.onClick(v);
                         }
                     }
                 });
