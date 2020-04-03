@@ -11,18 +11,18 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="4dp"
-        android:background="@drawable/timeout"/>
+        android:background="@drawable/timeout" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Oh no, timeout."
         android:textColor="#333333"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="click me to retry!"/>
+        android:text="click me to retry!" />
 
 </LinearLayout>

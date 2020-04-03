@@ -38,4 +38,5 @@ public class AnimateCallback extends Callback {
             Toast.makeText(context.getApplicationContext(), "stop animation", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

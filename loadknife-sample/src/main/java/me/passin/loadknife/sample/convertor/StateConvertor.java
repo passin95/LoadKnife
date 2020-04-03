@@ -1,11 +1,5 @@
 package me.passin.loadknife.sample.convertor;
 
-import static me.passin.loadknife.sample.convertor.ViewState.EMPTY;
-import static me.passin.loadknife.sample.convertor.ViewState.ERROR;
-import static me.passin.loadknife.sample.convertor.ViewState.LOADING;
-import static me.passin.loadknife.sample.convertor.ViewState.SUCCESS;
-import static me.passin.loadknife.sample.convertor.ViewState.UNKNOWN;
-
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.SuccessCallback;
 import me.passin.loadknife.core.Convertor;
@@ -13,6 +7,11 @@ import me.passin.loadknife.sample.callback.EmptyCallback;
 import me.passin.loadknife.sample.callback.ErrorCallback;
 import me.passin.loadknife.sample.callback.LoadingCallback;
 import me.passin.loadknife.sample.callback.UnknowCallback;
+import static me.passin.loadknife.sample.convertor.ViewState.EMPTY;
+import static me.passin.loadknife.sample.convertor.ViewState.ERROR;
+import static me.passin.loadknife.sample.convertor.ViewState.LOADING;
+import static me.passin.loadknife.sample.convertor.ViewState.SUCCESS;
+import static me.passin.loadknife.sample.convertor.ViewState.UNKNOWN;
 
 /**
  * @author: zbb 33775
@@ -45,4 +44,5 @@ public class StateConvertor implements Convertor<Integer> {
                 return null;
         }
     }
+
 }

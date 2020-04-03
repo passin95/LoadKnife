@@ -12,6 +12,6 @@
         android:layout_gravity="center"
         app:lottie_autoPlay="true"
         app:lottie_fileName="lottie_empty.json"
-        app:lottie_loop="true"/>
+        app:lottie_loop="true" />
 
 </FrameLayout>

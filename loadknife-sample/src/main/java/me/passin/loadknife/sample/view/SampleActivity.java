@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 import me.passin.loadknife.callback.Callback.OnReloadListener;
 import me.passin.loadknife.core.LoadKnife;
 import me.passin.loadknife.core.LoadService;
@@ -35,7 +36,9 @@ public class SampleActivity extends AppCompatActivity {
         });
         PostUtil.postCallbackDelayed(mLoadService, ErrorCallback.class);
         ViewHelper rootViewHelper = mLoadService.getViewHelper(ErrorCallback.class);
-        rootViewHelper.setText(R.id.tv_error_hint, "I am modify error hint")
-                .setTextColor(R.id.tv_error_hint, Color.BLUE);
+        TextView tvErrorHint = rootViewHelper.getView(R.id.tv_error_hint);
+        tvErrorHint.setText("I am modify error hint");
+        tvErrorHint.setTextColor(Color.BLUE);
     }
+
 }

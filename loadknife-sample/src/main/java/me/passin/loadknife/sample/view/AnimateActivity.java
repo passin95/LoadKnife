@@ -13,7 +13,6 @@ import me.passin.loadknife.sample.R;
 import me.passin.loadknife.sample.callback.AnimateCallback;
 import me.passin.loadknife.sample.callback.EmptyCallback;
 
-
 public class AnimateActivity extends AppCompatActivity {
 
     private LoadService loadService;
@@ -40,4 +39,5 @@ public class AnimateActivity extends AppCompatActivity {
         });
         PostUtil.postCallbackDelayed(loadService, EmptyCallback.class, 1000);
     }
+
 }

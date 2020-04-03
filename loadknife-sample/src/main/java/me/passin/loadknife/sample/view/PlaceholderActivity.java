@@ -30,4 +30,5 @@ public class PlaceholderActivity extends AppCompatActivity {
         });
         PostUtil.postSuccessDelayed(loadService, 1000);
     }
+
 }

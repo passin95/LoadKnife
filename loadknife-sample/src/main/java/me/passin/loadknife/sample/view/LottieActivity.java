@@ -13,7 +13,6 @@ import me.passin.loadknife.sample.callback.LoadingCallback;
 import me.passin.loadknife.sample.callback.LottieEmptyCallback;
 import me.passin.loadknife.sample.callback.LottieLoadingCallback;
 
-
 public class LottieActivity extends AppCompatActivity {
 
     private LoadService loadService;
@@ -34,4 +33,5 @@ public class LottieActivity extends AppCompatActivity {
         });
         PostUtil.postCallbackDelayed(loadService, LottieEmptyCallback.class);
     }
+
 }

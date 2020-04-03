@@ -13,12 +13,12 @@
         android:layout_height="wrap_content"
         android:text="Success"
         android:textColor="#358c69"
-        android:textSize="30sp"/>
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/tv_subTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Content in Activity"/>
+        android:text="Content in Activity" />
 
 </LinearLayout>

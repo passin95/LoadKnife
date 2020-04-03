@@ -48,4 +48,5 @@ public class NormalFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         PostUtil.postCallbackDelayed(loadService, CustomCallback.class);
     }
+
 }
