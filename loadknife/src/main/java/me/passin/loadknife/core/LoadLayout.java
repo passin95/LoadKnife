@@ -1,12 +1,13 @@
 package me.passin.loadknife.core;
 
 import android.content.Context;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.SuccessCallback;
 import me.passin.loadknife.utils.LoadKnifeUtils;
@@ -19,7 +20,7 @@ public class LoadLayout extends FrameLayout {
 
     private static final Map<Class<? extends Callback>, Callback> callbacks = new HashMap<>();
 
-    private Map<Class<? extends Callback>, ServiceView> mServiceViewMap = new ConcurrentHashMap<>();
+    private Map<Class<? extends Callback>, ViewHelper> mServiceViewMap = new HashMap<>();
     private Context mContext;
     private Callback.OnReloadListener mOnReloadListener;
     private Class<? extends Callback> mCurCallbackClass;
@@ -42,7 +43,7 @@ public class LoadLayout extends FrameLayout {
     }
 
     void initSuccessView(View view) {
-        mServiceViewMap.put(SuccessCallback.class, new ServiceView(view));
+        mServiceViewMap.put(SuccessCallback.class, new ViewHelper(view));
         addView(view);
     }
 
@@ -68,17 +69,17 @@ public class LoadLayout extends FrameLayout {
         }
         if (getChildCount() > 1) {
             Callback curCallback = getCallback(mCurCallbackClass);
-            curCallback.onDetach(mContext, getServiceView(mCurCallbackClass).getViewHelper());
+            curCallback.onDetach(mContext, getViewHelper(mCurCallbackClass));
             removeViewAt(1);
         }
-        ServiceView preServiceView = getServiceView(preCallbackClass);
+        ViewHelper preServiceView = getViewHelper(preCallbackClass);
         if (preCallbackClass == SuccessCallback.class) {
             preServiceView.setVisibility(true);
         } else {
             Callback preCallback = getCallback(preCallbackClass);
             addView(preServiceView.getRootView());
-            getServiceView(SuccessCallback.class).setVisibility(preCallback.successViewVisible());
-            preCallback.onAttach(mContext, preServiceView.getViewHelper());
+            getViewHelper(SuccessCallback.class).setVisibility(preCallback.successViewVisible());
+            preCallback.onAttach(mContext, preServiceView);
         }
 
         mCurCallbackClass = preCallbackClass;
@@ -103,27 +104,22 @@ public class LoadLayout extends FrameLayout {
         return callback;
     }
 
-    private ServiceView getServiceView(Class<? extends Callback> callbackClass) {
-        ServiceView serviceView = mServiceViewMap.get(callbackClass);
-        if (serviceView == null) {
+    @MainThread
+    public ViewHelper getViewHelper(Class<? extends Callback> callbackClass) {
+        ViewHelper viewHelper = mServiceViewMap.get(callbackClass);
+        if (viewHelper == null) {
             Callback callback = getCallback(callbackClass);
             // 构建 rootView
-            View rootView = View.inflate(mContext, callback.getLayoutId(), null);
-            ViewHelper viewHelper = new ViewHelper(rootView);
-
-            serviceView = new ServiceView(rootView, viewHelper, mOnReloadListener);
+            View rootView = LayoutInflater.from(mContext).inflate(callback.getLayoutId(), this, false);
+            viewHelper = new ViewHelper(rootView, mOnReloadListener);
             callback.onViewCreate(mContext, viewHelper);
-            mServiceViewMap.put(callbackClass, serviceView);
+            mServiceViewMap.put(callbackClass, viewHelper);
         }
-        return serviceView;
+        return viewHelper;
     }
 
     Class<? extends Callback> getCurrentCallback() {
         return mCurCallbackClass;
-    }
-
-    ViewHelper getViewHelper(Class<? extends Callback> callback) {
-        return getServiceView(callback).getViewHelper();
     }
 
     @Override
@@ -137,4 +133,5 @@ public class LoadLayout extends FrameLayout {
         super.onDetachedFromWindow();
         mIsDetach = true;
     }
+
 }

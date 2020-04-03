@@ -10,4 +10,5 @@ import me.passin.loadknife.callback.Callback;
 public interface Convertor<T> {
 
     Class<? extends Callback> convert(T value) throws Exception;
+
 }

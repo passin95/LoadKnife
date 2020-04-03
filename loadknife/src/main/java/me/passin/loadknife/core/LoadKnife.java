@@ -1,13 +1,12 @@
 package me.passin.loadknife.core;
 
-import static java.util.Collections.unmodifiableList;
-import static me.passin.loadknife.utils.Preconditions.checkNotNull;
-
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import java.util.ArrayList;
+import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import me.passin.loadknife.callback.Callback;
+import static me.passin.loadknife.utils.Preconditions.checkNotNull;
 
 /**
  * @author: zbb 33775
@@ -17,7 +16,8 @@ import me.passin.loadknife.callback.Callback;
 public class LoadKnife {
 
     private static volatile LoadKnife mLoadKnife;
-    final List<Convertor> mConvertors;
+
+    private final List<Convertor> mConvertors;
     /**
      * 内部抛出可控异常时展示的页面，例如 Convertor 转换失败。
      */
@@ -27,11 +27,11 @@ public class LoadKnife {
      */
     private final Class<? extends Callback> mDefaultCallback;
 
-    LoadKnife() {
+    private LoadKnife() {
         this(new Builder());
     }
 
-    LoadKnife(Builder builder) {
+    private LoadKnife(Builder builder) {
         this.mConvertors = unmodifiableList(builder.mConvertors);
         this.mErrorCallback = builder.mErrorCallback;
         this.mDefaultCallback = builder.mDefaultCallback;
@@ -127,5 +127,7 @@ public class LoadKnife {
         public LoadKnife build() {
             return new LoadKnife(this);
         }
+
     }
+
 }
