@@ -23,9 +23,13 @@ public class LoadKnife {
      */
     final Class<? extends Callback> mErrorCallback;
     /**
-     * 调用 register() 后默认页面
+     * 调用 register() 后默认页面。
      */
     private final Class<? extends Callback> mDefaultCallback;
+    /**
+     * 视图切换容器视图是否能够使子 View 的 Id，也是兼容约束或相对布局的关键。
+     */
+    final boolean mIsEnableUseChildViewId;
 
     private LoadKnife() {
         this(new Builder());
@@ -35,6 +39,7 @@ public class LoadKnife {
         this.mConvertors = unmodifiableList(builder.mConvertors);
         this.mErrorCallback = builder.mErrorCallback;
         this.mDefaultCallback = builder.mDefaultCallback;
+        this.mIsEnableUseChildViewId = builder.mIsEnableUseChildViewId;
     }
 
     public static LoadKnife getDefault() {
@@ -94,6 +99,7 @@ public class LoadKnife {
         private List<Convertor> mConvertors = new ArrayList<>(5);
         private Class<? extends Callback> mDefaultCallback;
         private Class<? extends Callback> mErrorCallback;
+        private boolean mIsEnableUseChildViewId = true;
 
         public Builder addConvertor(@NonNull Convertor convertor) {
             checkNotNull(convertor, "convertor == null");
@@ -113,6 +119,11 @@ public class LoadKnife {
         public Builder errorCallback(@NonNull Class<? extends Callback> errorCallback) {
             checkNotNull(errorCallback, "errorCallback == null");
             mErrorCallback = errorCallback;
+            return this;
+        }
+
+        public Builder isEnableUseChildViewId(boolean isEnable) {
+            mIsEnableUseChildViewId = isEnable;
             return this;
         }
 

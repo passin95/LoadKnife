@@ -5,6 +5,7 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +45,8 @@ public class LoadLayout extends FrameLayout {
 
     void initSuccessView(View view) {
         mServiceViewMap.put(SuccessCallback.class, new ViewHelper(view));
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
         addView(view);
     }
 
@@ -110,9 +113,12 @@ public class LoadLayout extends FrameLayout {
         if (viewHelper == null) {
             Callback callback = getCallback(callbackClass);
             // 构建 rootView
-            View rootView = LayoutInflater.from(mContext).inflate(callback.getLayoutId(), this, false);
+            View rootView = callback.onCreateView(mContext, this);
+            if (rootView == null) {
+                rootView = LayoutInflater.from(mContext).inflate(callback.getLayoutId(), this, false);
+            }
+
             viewHelper = new ViewHelper(rootView, mOnReloadListener);
-            callback.onViewCreate(mContext, viewHelper);
             mServiceViewMap.put(callbackClass, viewHelper);
         }
         return viewHelper;

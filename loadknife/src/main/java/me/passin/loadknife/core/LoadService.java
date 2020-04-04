@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.RelativeLayout;
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.Callback.OnReloadListener;
 import me.passin.loadknife.callback.SuccessCallback;
@@ -17,6 +19,19 @@ import me.passin.loadknife.callback.SuccessCallback;
  * @desc:
  */
 public class LoadService {
+
+    public static Class constraintLayoutClass;
+
+    static {
+        try {
+            constraintLayoutClass = Class.forName("android.support.constraint.ConstraintLayout");
+        } catch (ClassNotFoundException e) {
+            try {
+                constraintLayoutClass = Class.forName("androidx.constraintlayout.widget.ConstraintLayout");
+            } catch (ClassNotFoundException ex) {
+            }
+        }
+    }
 
     private LoadKnife mLoadKnife;
     private LoadLayout mLoadLayout;
@@ -57,9 +72,16 @@ public class LoadService {
         }
 
         mLoadLayout = new LoadLayout(context, onReloadListener);
+        LayoutParams realViewLayoutParams = realView.getLayoutParams();
         mLoadLayout.initSuccessView(realView);
+
         if (parentView != null) {
-            parentView.addView(mLoadLayout, childIndex, realView.getLayoutParams());
+            if (mLoadKnife.mIsEnableUseChildViewId && parentView instanceof RelativeLayout ||
+                    (constraintLayoutClass != null && constraintLayoutClass.isInstance(parentView))) {
+                mLoadLayout.setId(realView.getId());
+            }
+
+            parentView.addView(mLoadLayout, childIndex, realViewLayoutParams);
         }
     }
 

@@ -2,7 +2,9 @@ package me.passin.loadknife.callback;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.ViewGroup;
 import me.passin.loadknife.core.ViewHelper;
 
 /**
@@ -17,10 +19,11 @@ public abstract class Callback {
     int getLayoutId();
 
     /**
-     * 初始化 mRootView 成功后调用，Context 和 ViewHelper 都不可作为成员变量。
+     * Context 和 ViewGroup 都不可作为成员变量。
      */
-    public void onViewCreate(Context context, ViewHelper viewHelper) {
-
+    @Nullable
+    public View onCreateView(Context context, @Nullable ViewGroup container) {
+        return null;
     }
 
     /**
