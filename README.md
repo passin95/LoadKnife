@@ -1,6 +1,10 @@
 # LoadKnife
 
-高性能、高拓展地处理加载中，重试，无数据等界面切换。
+高性能、高拓展地处理加载中，重试，无数据等界面切换。并支持以下特性：
+
+1. 内部代码没有使用序列化，以减少内存的使用。
+2. 支持设置类型适配器，入参可任何对象转化成最终的 Callback 对象。
+3. 支持替换 ConstraintLayout 或 RelativeLayout 中的子视图。需要注意的是：**新的容器视图会使用子视图的所有 LayoutParams 属性以及 id（因此在替换前需要提前通过 findViewById 提取视图对象），并且子视图放弃除了宽高之外的所有 LayoutParams 属性**。
 
 ## 使用方式
 
@@ -65,14 +69,8 @@ mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
     public void onReload(View v) {
         // 重新加载逻辑
     }
-}).setCallBack(EmptyCallback.class, new Transform() {
-    @Override
-    public void modify(Context context, ViewHelper viewHelper) {
-        // 修改 view
-    }
-});
-
-//or
+})
+// 修改 view
 ViewHelper viewHelper = mLoadService.getViewHelper(EmptyCallback.class);
 ```
 
@@ -124,7 +122,7 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 ## 安装
 
 ```gradle
-implementation 'me.passin:loadknife:1.1.0'
+implementation 'me.passin:loadknife:1.1.1'
 ```
 
 ## 致谢

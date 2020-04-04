@@ -25,4 +25,5 @@ dependencies {
     implementation rootProject.ext.appCompat
     implementation project(':loadknife')
     implementation('com.airbnb.android:lottie:2.2.5') { exclude group: 'com.android.support' }
+    implementation "com.android.support.constraint:constraint-layout:1.1.3"
 }
