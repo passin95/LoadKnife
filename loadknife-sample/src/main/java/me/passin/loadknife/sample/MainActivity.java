@@ -11,6 +11,7 @@ import me.passin.loadknife.sample.view.LottieActivity;
 import me.passin.loadknife.sample.view.PlaceholderActivity;
 import me.passin.loadknife.sample.view.SampleActivity;
 import me.passin.loadknife.sample.view.SingleFragmentActivity;
+import me.passin.loadknife.sample.view.ViewTargetActivity;
 
 /**
  * @author: zbb 33775
@@ -48,4 +49,9 @@ public class MainActivity extends AppCompatActivity {
     public void convertor(View view) {
         startActivity(new Intent(this, ConvertorActivity.class));
     }
+
+    public void viewTarget(View view) {
+        startActivity(new Intent(this, ViewTargetActivity.class));
+    }
+
 }

@@ -48,4 +48,11 @@
         android:text="ConvertorActivity"
         android:textAllCaps="false" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="viewTarget"
+        android:text="ViewTargetActivity"
+        android:textAllCaps="false" />
+
 </LinearLayout>
