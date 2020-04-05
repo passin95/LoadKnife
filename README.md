@@ -4,7 +4,7 @@
 
 1. 内部代码没有使用序列化，以减少内存的使用。
 2. 支持设置类型适配器，入参可任何对象转化成最终的 Callback 对象。
-3. 支持替换 ConstraintLayout 或 RelativeLayout 中的子视图。需要注意的是：**新的容器视图会使用子视图的所有 LayoutParams 属性以及 id（因此在替换前需要提前通过 findViewById 提取视图对象），并且子视图放弃除了宽高之外的所有 LayoutParams 属性**。
+3. 支持替换 ConstraintLayout 或 RelativeLayout 中的子视图。需要注意的是：**新的容器视图会使用子视图的所有 LayoutParams 属性以及 id（因此在替换前需要提前通过 findViewById 提取视图对象），并且子视图放弃了所有 LayoutParams 属性**。
 
 ## 使用方式
 
