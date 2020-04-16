@@ -3,10 +3,8 @@ package me.passin.loadknife.core;
 import android.support.annotation.IdRes;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.View.OnClickListener;
 import java.util.HashMap;
 import java.util.Map;
-import me.passin.loadknife.callback.Callback.OnReloadListener;
 
 /**
  * @author: zbb 33775
@@ -17,28 +15,10 @@ public class ViewHelper {
 
     private View mRootView;
     private SparseArray<View> mViews;
-    private OnReloadListener mOnReloadListener;
     private Map<String, Object> mDataMap;
 
     ViewHelper(View view) {
-        this(view, null);
-    }
-
-    ViewHelper(View view, OnReloadListener onReloadListener) {
         mRootView = view;
-        mOnReloadListener = onReloadListener;
-        init();
-    }
-
-    private void init() {
-        if (mOnReloadListener != null) {
-            mRootView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnReloadListener.onReload(v);
-                }
-            });
-        }
     }
 
     public <T extends View> T getView(@IdRes int viewId) {

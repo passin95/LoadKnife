@@ -111,14 +111,25 @@ public class LoadLayout extends FrameLayout {
     public ViewHelper getViewHelper(Class<? extends Callback> callbackClass) {
         ViewHelper viewHelper = mServiceViewMap.get(callbackClass);
         if (viewHelper == null) {
-            Callback callback = getCallback(callbackClass);
+            final Callback callback = getCallback(callbackClass);
             // 构建 rootView
             View rootView = callback.onCreateView(mContext, this);
             if (rootView == null) {
                 rootView = LayoutInflater.from(mContext).inflate(callback.getLayoutId(), this, false);
             }
 
-            viewHelper = new ViewHelper(rootView, mOnReloadListener);
+            viewHelper = new ViewHelper(rootView);
+            if (mOnReloadListener != null) {
+                rootView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (callback.onReloadEvent(v)) {
+                            return;
+                        }
+                        mOnReloadListener.onReload(callback, v);
+                    }
+                });
+            }
             mServiceViewMap.put(callbackClass, viewHelper);
         }
         return viewHelper;

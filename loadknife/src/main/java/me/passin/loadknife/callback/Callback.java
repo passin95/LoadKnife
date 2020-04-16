@@ -41,6 +41,14 @@ public abstract class Callback {
     }
 
     /**
+     * @param view 所切换的视图
+     * @return true：拦截
+     */
+    public boolean onReloadEvent(View view) {
+        return false;
+    }
+
+    /**
      * @return true：和 successView 一起显示
      *         false： 单独显示
      */
@@ -50,7 +58,7 @@ public abstract class Callback {
 
     public interface OnReloadListener {
 
-        void onReload(View v);
+        void onReload(Callback callback, View v);
 
     }
 
