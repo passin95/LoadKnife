@@ -28,38 +28,36 @@ LoadKnife.newBuilder()
 ### Callback 配置
 
 ```java
-public class AnimateCallback extends EmptyCallback {
+public class AnimateCallback extends Callback {
 
-    @Override
-    public int getLayoutId() {
-        return R.layout.callback_animate;
-    }
- 
-    // 不能提取方法的局部变量作为类成员变量，Callback 仅仅转为转接者使用。
-    @Override
-    public void onAttach(Context context, ViewHelper viewHelper) {
-        View animateView = viewHelper.getView(R.id.view_animate);
-        Animation animation = new RotateAnimation(0, 359, Animation.RELATIVE_TO_SELF,
-                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        animation.setDuration(1000);
-        animation.setRepeatCount(Integer.MAX_VALUE);
-        animation.setFillAfter(true);
-        animation.setInterpolator(new LinearInterpolator());
-        animateView.startAnimation(animation);
-        Toast.makeText(context.getApplicationContext(), "start animation", Toast.LENGTH_SHORT).show();
-    }
+     @Override
+     public int getLayoutId() {
+         return R.layout.callback_animate;
+     }
 
-    // 不能提取方法的局部变量作为类成员变量，Callback 仅仅转为转接者使用。
-    @Override
-    public void onDetach(Context context, ViewHelper viewHelper) {
-        View animateView = viewHelper.getView(R.id.view_animate);
-        if (animateView != null) {
-            animateView.clearAnimation();
-            Toast.makeText(context.getApplicationContext(), "stop animation", Toast.LENGTH_SHORT).show();
-        }
-    }
+     @Override
+     public void onAttach(Context context, ViewHelper viewHelper) {
+         View animateView = viewHelper.getView(R.id.view_animate);
+         Animation animation = new RotateAnimation(0, 359, Animation.RELATIVE_TO_SELF,
+                 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+         animation.setDuration(1000);
+         animation.setRepeatCount(Integer.MAX_VALUE);
+         animation.setFillAfter(true);
+         animation.setInterpolator(new LinearInterpolator());
+         animateView.startAnimation(animation);
+         Toast.makeText(context.getApplicationContext(), "start animation", Toast.LENGTH_SHORT).show();
+     }
 
-}
+     @Override
+     public void onDetach(Context context, ViewHelper viewHelper) {
+         View animateView = viewHelper.getView(R.id.view_animate);
+         if (animateView != null) {
+             animateView.clearAnimation();
+             Toast.makeText(context.getApplicationContext(), "stop animation", Toast.LENGTH_SHORT).show();
+         }
+     }
+
+ }
 ```
 
 ### 动态修改界面
@@ -67,7 +65,7 @@ public class AnimateCallback extends EmptyCallback {
 ```java
 mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
     @Override
-    public void onReload(View v) {
+    public void onReload(Callback callback, View v) {
         // 重新加载逻辑
     }
 })
@@ -82,7 +80,7 @@ ViewHelper viewHelper = mLoadService.getViewHelper(EmptyCallback.class);
 ```java
 mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
     @Override
-    public void onReload(View v) {
+    public void onReload(Callback callback, View v) {
         // 重新加载逻辑
     }
 });
@@ -93,7 +91,7 @@ mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
 ```java
 mLoadService = LoadKnife.getDefault().register(view, new Callback.OnReloadListener() {
     @Override
-    public void onReload(View v) {
+    public void onReload(Callback callback, View v) {
         // 重新加载逻辑
     }
 });
@@ -107,7 +105,7 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
     View rootView = View.inflate(getActivity(), R.layout.fragment_a_content, null);
     loadService = loadKnife.register(rootView, new OnReloadListener() {
         @Override
-        public void onReload(View v) {
+        public void onReload(Callback callback, View v) {
             
         }
     });
@@ -123,7 +121,7 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 ## 安装
 
 ```gradle
-implementation 'me.passin:loadknife:1.1.1'
+implementation 'me.passin:loadknife:1.2.0'
 ```
 
 ## 致谢
