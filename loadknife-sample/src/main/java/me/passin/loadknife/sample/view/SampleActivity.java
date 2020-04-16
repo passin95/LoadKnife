@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.Callback.OnReloadListener;
 import me.passin.loadknife.core.LoadKnife;
 import me.passin.loadknife.core.LoadService;
@@ -29,7 +30,7 @@ public class SampleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_content);
         mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
             @Override
-            public void onReload(View v) {
+            public void onReload(Callback callback, View v) {
                 mLoadService.showDefault();
                 PostUtil.postSuccessDelayed(mLoadService);
             }

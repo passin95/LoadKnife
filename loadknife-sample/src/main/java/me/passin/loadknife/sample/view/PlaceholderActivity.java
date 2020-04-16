@@ -24,7 +24,7 @@ public class PlaceholderActivity extends AppCompatActivity {
                 .build();
         loadService = loadKnife.register(this, new Callback.OnReloadListener() {
             @Override
-            public void onReload(View v) {
+            public void onReload(Callback callback, View v) {
                 //do retry logic...
             }
         });

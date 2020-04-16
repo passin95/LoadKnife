@@ -28,7 +28,7 @@ public class ViewTargetActivity extends AppCompatActivity {
                 .build();
         loadService = loadSir.register(imageView, new Callback.OnReloadListener() {
             @Override
-            public void onReload(View v) {
+            public void onReload(Callback callback, View v) {
                 loadService.showCallback(LoadingCallback.class);
 
                 PostUtil.postSuccessDelayed(loadService);

@@ -26,7 +26,7 @@ public class LottieActivity extends AppCompatActivity {
                 .build();
         loadService = loadSir.register(this, new Callback.OnReloadListener() {
             @Override
-            public void onReload(View v) {
+            public void onReload(Callback callback, View v) {
                 loadService.showCallback(LottieLoadingCallback.class);
                 PostUtil.postSuccessDelayed(loadService, 8000);
             }

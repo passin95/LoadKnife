@@ -26,7 +26,7 @@ public class AnimateActivity extends AppCompatActivity {
                 .build();
         loadService = loadSir.register(this, new Callback.OnReloadListener() {
             @Override
-            public void onReload(View v) {
+            public void onReload(Callback callback, View v) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

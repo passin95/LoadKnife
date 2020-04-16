@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.Callback.OnReloadListener;
 import me.passin.loadknife.core.LoadKnife;
 import me.passin.loadknife.core.LoadService;
@@ -36,7 +37,7 @@ public class NormalFragment extends Fragment {
                 .build();
         loadService = loadKnife.register(rootView, new OnReloadListener() {
             @Override
-            public void onReload(View v) {
+            public void onReload(Callback callback, View v) {
                 // 重新加载逻辑
             }
         });

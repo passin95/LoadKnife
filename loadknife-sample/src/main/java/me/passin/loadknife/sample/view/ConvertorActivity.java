@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.Callback.OnReloadListener;
 import me.passin.loadknife.core.LoadKnife;
 import me.passin.loadknife.core.LoadService;
@@ -26,7 +27,7 @@ public class ConvertorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_content);
         mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
             @Override
-            public void onReload(View v) {
+            public void onReload(Callback callback, View v) {
                 mLoadService.showCallback(ViewState.UNKNOWN);
                 PostUtil.postSuccessDelayed(mLoadService, 8000);
             }
