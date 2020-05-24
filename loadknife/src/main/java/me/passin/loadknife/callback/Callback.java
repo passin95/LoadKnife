@@ -1,10 +1,10 @@
 package me.passin.loadknife.callback;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
 import me.passin.loadknife.core.ViewHelper;
 
 /**
@@ -15,8 +15,7 @@ import me.passin.loadknife.core.ViewHelper;
  */
 public abstract class Callback {
 
-    public abstract @LayoutRes
-    int getLayoutId();
+    public abstract @LayoutRes int getLayoutId();
 
     /**
      * Context 和 ViewGroup 都不可作为成员变量。
@@ -34,7 +33,7 @@ public abstract class Callback {
     }
 
     /**
-     * 从 LoadLayout 移除前触发，Context 和 ViewHelper 都不可作为成员变量。
+     * 从 LoadLayout 移除前或脱离 window 时触发，Context 和 ViewHelper 都不可作为成员变量。
      */
     public void onDetach(Context context, ViewHelper viewHelper) {
 
@@ -48,12 +47,8 @@ public abstract class Callback {
         return false;
     }
 
-    /**
-     * @return true：和 successView 一起显示
-     *         false： 单独显示
-     */
-    public boolean successViewVisible() {
-        return false;
+    public int successViewVisibility() {
+        return View.INVISIBLE;
     }
 
     public interface OnReloadListener {

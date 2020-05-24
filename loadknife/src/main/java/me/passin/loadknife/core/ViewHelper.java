@@ -1,8 +1,8 @@
 package me.passin.loadknife.core;
 
-import android.support.annotation.IdRes;
 import android.util.SparseArray;
 import android.view.View;
+import androidx.annotation.IdRes;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,12 +57,8 @@ public class ViewHelper {
         return mRootView;
     }
 
-    public void setVisibility(boolean visibility) {
-        if (visibility) {
-            mRootView.setVisibility(View.VISIBLE);
-        } else {
-            mRootView.setVisibility(View.INVISIBLE);
-        }
+    public void setVisibility(int visibility) {
+        mRootView.setVisibility(visibility);
     }
 
 }
