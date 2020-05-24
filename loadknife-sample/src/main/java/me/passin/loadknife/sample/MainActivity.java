@@ -2,9 +2,9 @@ package me.passin.loadknife.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import me.passin.loadknife.sample.view.AnimateActivity;
 import me.passin.loadknife.sample.view.ConvertorActivity;
 import me.passin.loadknife.sample.view.LottieActivity;

@@ -1,6 +1,6 @@
 package me.passin.loadknife.sample.convertor;
 
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 import static me.passin.loadknife.sample.convertor.ViewState.EMPTY;
 import static me.passin.loadknife.sample.convertor.ViewState.ERROR;
 import static me.passin.loadknife.sample.convertor.ViewState.LOADING;

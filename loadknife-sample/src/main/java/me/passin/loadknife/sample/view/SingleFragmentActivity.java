@@ -1,7 +1,7 @@
 package me.passin.loadknife.sample.view;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import me.passin.loadknife.sample.R;
 
 public class SingleFragmentActivity extends AppCompatActivity {

@@ -2,9 +2,9 @@ package me.passin.loadknife.sample.view;
 
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.core.LoadKnife;
 import me.passin.loadknife.core.LoadService;
