@@ -48,7 +48,7 @@ public class ViewHelper {
      */
     public Object getData(String key) {
         if (mDataMap == null) {
-            mDataMap = new HashMap();
+            return null;
         }
         return mDataMap.get(key);
     }

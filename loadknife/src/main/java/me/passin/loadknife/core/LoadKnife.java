@@ -1,11 +1,15 @@
 package me.passin.loadknife.core;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import me.passin.loadknife.callback.Callback;
+import me.passin.loadknife.core.target.ActivityTargetAdapter;
+import me.passin.loadknife.core.target.TargetAdapter;
+import me.passin.loadknife.core.target.ViewTargetAdapter;
 import static me.passin.loadknife.utils.Preconditions.checkNotNull;
 
 /**
@@ -17,26 +21,36 @@ public class LoadKnife {
 
     private static volatile LoadKnife mLoadKnife;
 
-    private final List<Convertor> mConvertors;
-    /**
-     * 内部抛出可控异常时展示的页面，例如 Convertor 转换失败。
-     */
-    final Class<? extends Callback> mErrorCallback;
+    @Nullable
+    private final List<CallbackAdapter> mCallbackAdapters;
+    @NonNull
+    private final List<TargetAdapter> mTargetAdapters;
     /**
      * 调用 register() 后默认页面。
      */
+    @Nullable
     private final Class<? extends Callback> mDefaultCallback;
+    /**
+     * 内部抛出可控异常时展示的页面，例如 Convertor 转换失败。
+     */
+    @Nullable
+    final Class<? extends Callback> mErrorCallback;
     /**
      * 视图切换容器视图是否能够使子 View 的 Id，也是兼容约束或相对布局的关键。
      */
-    final boolean mIsEnableUseChildViewId;
+    private final boolean mIsEnableUseChildViewId;
 
     private LoadKnife() {
         this(new Builder());
     }
 
     private LoadKnife(Builder builder) {
-        this.mConvertors = unmodifiableList(builder.mConvertors);
+        if (builder.mCallbackAdapters != null) {
+            this.mCallbackAdapters = unmodifiableList(builder.mCallbackAdapters);
+        } else {
+            this.mCallbackAdapters = null;
+        }
+        this.mTargetAdapters = unmodifiableList(builder.mTargetAdapters);
         this.mErrorCallback = builder.mErrorCallback;
         this.mDefaultCallback = builder.mDefaultCallback;
         this.mIsEnableUseChildViewId = builder.mIsEnableUseChildViewId;
@@ -57,13 +71,16 @@ public class LoadKnife {
      * 主要适用于构造函数含有参数的 callback，多次添加会覆盖。
      * 无参 Callback 可选择不添加，内部会通过懒加载反射初始化。
      */
-    public static void addCallback(@NonNull Callback... callback) {
+    @MainThread
+    public static Callback addCallback(@NonNull Callback callback) {
         checkNotNull(callback, "callback == null");
-        LoadLayout.addCallback(callback);
+        return LoadLayout.addCallback(callback);
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
+    @MainThread
+    public static Callback removeCallback(@NonNull Class<? extends Callback> callbackClass) {
+        checkNotNull(callbackClass, "callback == null");
+        return LoadLayout.removeCallback(callbackClass);
     }
 
     public LoadService register(@NonNull Object target) {
@@ -80,10 +97,13 @@ public class LoadKnife {
     }
 
     @SuppressWarnings("unchecked")
-    public Class<? extends Callback> callbackConverter(Object o) {
-        for (Convertor convertor : mConvertors) {
+    public Class<? extends Callback> callbackAdapter(Object o) {
+        if (mCallbackAdapters == null) {
+            return null;
+        }
+        for (CallbackAdapter convertor : mCallbackAdapters) {
             try {
-                Class<? extends Callback> callBack = convertor.convert(o);
+                Class<? extends Callback> callBack = convertor.adapt(o);
                 if (callBack != null) {
                     return callBack;
                 }
@@ -94,16 +114,51 @@ public class LoadKnife {
         return null;
     }
 
+    @NonNull
+    public LoadLayout targetAdapter(Object target) {
+        for (TargetAdapter targetAdapter : mTargetAdapters) {
+            try {
+                LoadLayout loadLayout = targetAdapter.adapt(this, target);
+                if (loadLayout != null) {
+                    return loadLayout;
+                }
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+        throw new IllegalArgumentException("Could not locate target adapter for " + target.getClass().getCanonicalName());
+    }
+
+    public boolean isEnableUseChildViewId() {
+        return mIsEnableUseChildViewId;
+    }
+
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
     public static class Builder {
 
-        private List<Convertor> mConvertors = new ArrayList<>(5);
+        private List<CallbackAdapter> mCallbackAdapters;
+        private List<TargetAdapter> mTargetAdapters = new ArrayList<>(5);
         private Class<? extends Callback> mDefaultCallback;
         private Class<? extends Callback> mErrorCallback;
         private boolean mIsEnableUseChildViewId = true;
 
-        public Builder addConvertor(@NonNull Convertor convertor) {
-            checkNotNull(convertor, "convertor == null");
-            mConvertors.add(convertor);
+        {
+            mTargetAdapters.add(ActivityTargetAdapter.getInstance());
+            mTargetAdapters.add(ViewTargetAdapter.getInstance());
+        }
+
+        public Builder addCallbackConvertor(@NonNull CallbackAdapter adapter) {
+            checkNotNull(adapter, "convertor == null");
+            getCallbackAdapters().add(adapter);
+            return this;
+        }
+
+        public Builder addTargetConverter(@NonNull TargetAdapter adapter) {
+            checkNotNull(adapter, "convertor == null");
+            mTargetAdapters.add(adapter);
             return this;
         }
 
@@ -125,6 +180,13 @@ public class LoadKnife {
         public Builder isEnableUseChildViewId(boolean isEnable) {
             mIsEnableUseChildViewId = isEnable;
             return this;
+        }
+
+        private List<CallbackAdapter> getCallbackAdapters() {
+            if (mCallbackAdapters == null) {
+                mCallbackAdapters = new ArrayList<>(5);
+            }
+            return mCallbackAdapters;
         }
 
         public void initializeDefault() {

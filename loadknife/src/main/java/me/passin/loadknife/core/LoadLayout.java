@@ -1,15 +1,17 @@
 package me.passin.loadknife.core;
 
 import android.content.Context;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
 import java.util.HashMap;
 import java.util.Map;
 import me.passin.loadknife.callback.Callback;
+import me.passin.loadknife.callback.Callback.OnReloadListener;
 import me.passin.loadknife.callback.SuccessCallback;
 import me.passin.loadknife.utils.LoadKnifeUtils;
 
@@ -19,35 +21,28 @@ import me.passin.loadknife.utils.LoadKnifeUtils;
  */
 public class LoadLayout extends FrameLayout {
 
-    private static final Map<Class<? extends Callback>, Callback> callbacks = new HashMap<>();
+    private static final Map<Class<? extends Callback>, Callback> CALLBACKS = new HashMap<>();
 
-    private Map<Class<? extends Callback>, ViewHelper> mServiceViewMap = new HashMap<>();
-    private Context mContext;
+    private Map<Class<? extends Callback>, ViewHelper> mServiceViewMap = new ArrayMap<>();
     private Callback.OnReloadListener mOnReloadListener;
     private Class<? extends Callback> mCurCallbackClass;
-    private boolean mIsDetach;
+    private ViewHelper mSuccessViewHelper;
 
-    LoadLayout(@NonNull Context context) {
+    public LoadLayout(@NonNull Context context, View realView) {
         super(context);
+        mSuccessViewHelper = new ViewHelper(realView);
+        mServiceViewMap.put(SuccessCallback.class, mSuccessViewHelper);
     }
 
-    public LoadLayout(@NonNull Context context, Callback.OnReloadListener onReloadListener) {
-        this(context);
-        this.mContext = context;
-        this.mOnReloadListener = onReloadListener;
+    @MainThread
+    static Callback addCallback(Callback callback) {
+        return LoadLayout.CALLBACKS.put(callback.getClass(), callback);
     }
 
-    static void addCallback(Callback... callbacks) {
-        for (Callback callback : callbacks) {
-            LoadLayout.callbacks.put(callback.getClass(), callback);
-        }
-    }
-
-    void initSuccessView(View view) {
-        mServiceViewMap.put(SuccessCallback.class, new ViewHelper(view));
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        addView(view);
+    @MainThread
+    @Nullable
+    static Callback removeCallback(Class<? extends Callback> callbackClass) {
+        return LoadLayout.CALLBACKS.remove(callbackClass);
     }
 
     void showCallback(final Class<? extends Callback> callback) {
@@ -67,33 +62,30 @@ public class LoadLayout extends FrameLayout {
         if (mCurCallbackClass == preCallbackClass) {
             return;
         }
-        if (mIsDetach) {
-            return;
-        }
         if (getChildCount() > 1) {
             Callback curCallback = getCallback(mCurCallbackClass);
-            curCallback.onDetach(mContext, getViewHelper(mCurCallbackClass));
+            curCallback.onDetach(getContext(), getViewHelper(mCurCallbackClass));
             removeViewAt(1);
         }
-        ViewHelper preServiceView = getViewHelper(preCallbackClass);
         if (preCallbackClass == SuccessCallback.class) {
-            preServiceView.setVisibility(true);
+            mSuccessViewHelper.setVisibility(View.VISIBLE);
         } else {
+            ViewHelper preServiceView = getViewHelper(preCallbackClass);
             Callback preCallback = getCallback(preCallbackClass);
             addView(preServiceView.getRootView());
-            getViewHelper(SuccessCallback.class).setVisibility(preCallback.successViewVisible());
-            preCallback.onAttach(mContext, preServiceView);
+            mSuccessViewHelper.setVisibility(preCallback.successViewVisibility());
+            preCallback.onAttach(getContext(), preServiceView);
         }
 
         mCurCallbackClass = preCallbackClass;
     }
 
     private Callback getCallback(Class<? extends Callback> callbackClass) {
-        Callback callback = callbacks.get(callbackClass);
+        Callback callback = CALLBACKS.get(callbackClass);
         if (callback == null) {
             try {
                 callback = callbackClass.newInstance();
-                callbacks.put(callbackClass, callback);
+                CALLBACKS.put(callbackClass, callback);
             } catch (IllegalAccessException e) {
                 throw new IllegalArgumentException(
                         "Please provide a constructor without parameters in " + callbackClass.getSimpleName()
@@ -113,9 +105,9 @@ public class LoadLayout extends FrameLayout {
         if (viewHelper == null) {
             final Callback callback = getCallback(callbackClass);
             // 构建 rootView
-            View rootView = callback.onCreateView(mContext, this);
+            View rootView = callback.onCreateView(getContext(), this);
             if (rootView == null) {
-                rootView = LayoutInflater.from(mContext).inflate(callback.getLayoutId(), this, false);
+                rootView = LayoutInflater.from(getContext()).inflate(callback.getLayoutId(), this, false);
             }
 
             viewHelper = new ViewHelper(rootView);
@@ -139,16 +131,17 @@ public class LoadLayout extends FrameLayout {
         return mCurCallbackClass;
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        mIsDetach = false;
+    public void setOnReloadListener(OnReloadListener onReloadListener) {
+        mOnReloadListener = onReloadListener;
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mIsDetach = true;
+        if (mCurCallbackClass != null && mCurCallbackClass != SuccessCallback.class) {
+            Callback curCallback = getCallback(mCurCallbackClass);
+            curCallback.onDetach(getContext(), getViewHelper(mCurCallbackClass));
+        }
     }
 
 }

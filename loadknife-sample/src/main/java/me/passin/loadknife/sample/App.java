@@ -21,7 +21,7 @@ public class App extends Application {
         LoadKnife.newBuilder()
                 .defaultCallback(LoadingCallback.class)
                 .errorCallback(ErrorCallback.class)
-                .addConvertor(StateConvertor.create())
+                .addCallbackConvertor(StateConvertor.create())
                 .initializeDefault();
         StrictMode.enableDefaults();
     }

@@ -2,7 +2,7 @@ package me.passin.loadknife.sample.convertor;
 
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.SuccessCallback;
-import me.passin.loadknife.core.Convertor;
+import me.passin.loadknife.core.CallbackAdapter;
 import me.passin.loadknife.sample.callback.EmptyCallback;
 import me.passin.loadknife.sample.callback.ErrorCallback;
 import me.passin.loadknife.sample.callback.LoadingCallback;
@@ -18,14 +18,14 @@ import static me.passin.loadknife.sample.convertor.ViewState.UNKNOWN;
  * @date: 2019/3/19 16:02
  * @desc:
  */
-public class StateConvertor implements Convertor<Integer> {
+public class StateConvertor implements CallbackAdapter<Integer> {
 
     public static StateConvertor create() {
         return new StateConvertor();
     }
 
     @Override
-    public Class<? extends Callback> convert(@ViewState Integer value) throws Exception {
+    public Class<? extends Callback> adapt(@ViewState Integer value) throws Exception {
         if (value == null) {
             return null;
         }
