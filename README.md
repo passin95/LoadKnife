@@ -121,7 +121,8 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 ## 安装
 
 ```gradle
-implementation 'me.passin:loadknife:1.2.0'
+// 基于 Android X。
+implementation 'me.passin:loadknife:1.3.0'
 ```
 
 ## 致谢
