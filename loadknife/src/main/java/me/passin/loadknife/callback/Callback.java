@@ -3,8 +3,7 @@ package me.passin.loadknife.callback;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import me.passin.loadknife.core.ViewHelper;
 
 /**
@@ -15,15 +14,11 @@ import me.passin.loadknife.core.ViewHelper;
  */
 public abstract class Callback {
 
-    public abstract @LayoutRes int getLayoutId();
-
     /**
      * Context 和 ViewGroup 都不可作为成员变量。
      */
-    @Nullable
-    public View onCreateView(Context context, @Nullable ViewGroup container) {
-        return null;
-    }
+    @NonNull
+    public abstract View onCreateView(Context context, @NonNull ViewGroup container);
 
     /**
      * 添加到 LoadLayout 后触发，Context 和 ViewHelper 都不可作为成员变量。
@@ -40,10 +35,9 @@ public abstract class Callback {
     }
 
     /**
-     * @param view 所切换的视图
      * @return true：拦截
      */
-    public boolean onReloadEvent(View view) {
+    public boolean onInterceptReloadEvent(ViewHelper viewHelper) {
         return false;
     }
 

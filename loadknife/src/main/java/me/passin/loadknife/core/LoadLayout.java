@@ -1,7 +1,6 @@
 package me.passin.loadknife.core;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import androidx.annotation.MainThread;
@@ -106,16 +105,18 @@ public class LoadLayout extends FrameLayout {
             final Callback callback = getCallback(callbackClass);
             // 构建 rootView
             View rootView = callback.onCreateView(getContext(), this);
+
             if (rootView == null) {
-                rootView = LayoutInflater.from(getContext()).inflate(callback.getLayoutId(), this, false);
+                throw new NullPointerException(callback.getClass().toString() + " onCreateView() can't return null");
             }
 
             viewHelper = new ViewHelper(rootView);
             if (mOnReloadListener != null) {
+                final ViewHelper finalViewHelper = viewHelper;
                 rootView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (callback.onReloadEvent(v)) {
+                        if (callback.onInterceptReloadEvent(finalViewHelper)) {
                             return;
                         }
                         mOnReloadListener.onReload(callback, v);

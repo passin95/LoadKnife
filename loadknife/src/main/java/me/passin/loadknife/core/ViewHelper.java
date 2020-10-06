@@ -3,7 +3,7 @@ package me.passin.loadknife.core;
 import android.util.SparseArray;
 import android.view.View;
 import androidx.annotation.IdRes;
-import java.util.HashMap;
+import androidx.collection.ArrayMap;
 import java.util.Map;
 
 /**
@@ -38,7 +38,7 @@ public class ViewHelper {
      */
     public void putData(String key, Object value) {
         if (mDataMap == null) {
-            mDataMap = new HashMap();
+            mDataMap = new ArrayMap<>();
         }
         mDataMap.put(key, value);
     }
