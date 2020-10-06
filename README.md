@@ -122,7 +122,7 @@ public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
 
 ```gradle
 // 基于 Android X。
-implementation 'me.passin:loadknife:1.3.0'
+implementation 'me.passin:loadknife:1.4.0'
 ```
 
 ## 致谢
