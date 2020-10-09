@@ -51,7 +51,7 @@ public class ViewTargetAdapter implements TargetAdapter {
             parentView.removeViewAt(childIndex);
         }
 
-        LoadLayout mLoadLayout = new LoadLayout(context, realView);
+        LoadLayout mLoadLayout = new LoadLayout(context, realView, loadKnife);
         realView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         mLoadLayout.addView(realView);

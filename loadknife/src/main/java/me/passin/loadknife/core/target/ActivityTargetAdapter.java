@@ -31,7 +31,7 @@ public class ActivityTargetAdapter implements TargetAdapter {
         LayoutParams realViewLayoutParams = realView.getLayoutParams();
         parentView.removeViewAt(0);
 
-        LoadLayout mLoadLayout = new LoadLayout(activity, realView);
+        LoadLayout mLoadLayout = new LoadLayout(activity, realView, loadKnife);
         realView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         mLoadLayout.addView(realView);

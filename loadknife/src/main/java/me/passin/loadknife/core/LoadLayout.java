@@ -1,18 +1,16 @@
 package me.passin.loadknife.core;
 
 import android.content.Context;
+import android.os.Looper;
 import android.view.View;
 import android.widget.FrameLayout;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
-import java.util.HashMap;
 import java.util.Map;
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.Callback.OnReloadListener;
 import me.passin.loadknife.callback.SuccessCallback;
-import me.passin.loadknife.utils.LoadKnifeUtils;
 
 /**
  * @author: zbb 33775
@@ -20,32 +18,23 @@ import me.passin.loadknife.utils.LoadKnifeUtils;
  */
 public class LoadLayout extends FrameLayout {
 
-    private static final Map<Class<? extends Callback>, Callback> CALLBACKS = new HashMap<>();
+    private final Map<Class<? extends Callback>, Callback> mCallbackMap;
 
     private Map<Class<? extends Callback>, ViewHelper> mServiceViewMap = new ArrayMap<>();
+
     private Callback.OnReloadListener mOnReloadListener;
     private Class<? extends Callback> mCurCallbackClass;
     private ViewHelper mSuccessViewHelper;
 
-    public LoadLayout(@NonNull Context context, View realView) {
+    public LoadLayout(@NonNull Context context, @NonNull View realView, @NonNull LoadKnife loadKnife) {
         super(context);
         mSuccessViewHelper = new ViewHelper(realView);
         mServiceViewMap.put(SuccessCallback.class, mSuccessViewHelper);
-    }
-
-    @MainThread
-    static Callback addCallback(Callback callback) {
-        return LoadLayout.CALLBACKS.put(callback.getClass(), callback);
-    }
-
-    @MainThread
-    @Nullable
-    static Callback removeCallback(Class<? extends Callback> callbackClass) {
-        return LoadLayout.CALLBACKS.remove(callbackClass);
+        mCallbackMap = loadKnife.mCallbackMap;
     }
 
     void showCallback(final Class<? extends Callback> callback) {
-        if (LoadKnifeUtils.isMainThread()) {
+        if (isMainThread()) {
             showCallbackView(callback);
         } else {
             post(new Runnable() {
@@ -80,11 +69,11 @@ public class LoadLayout extends FrameLayout {
     }
 
     private Callback getCallback(Class<? extends Callback> callbackClass) {
-        Callback callback = CALLBACKS.get(callbackClass);
+        Callback callback = mCallbackMap.get(callbackClass);
         if (callback == null) {
             try {
                 callback = callbackClass.newInstance();
-                CALLBACKS.put(callbackClass, callback);
+                mCallbackMap.put(callbackClass, callback);
             } catch (IllegalAccessException e) {
                 throw new IllegalArgumentException(
                         "Please provide a constructor without parameters in " + callbackClass.getSimpleName()
@@ -143,6 +132,10 @@ public class LoadLayout extends FrameLayout {
             Callback curCallback = getCallback(mCurCallbackClass);
             curCallback.onDetach(getContext(), getViewHelper(mCurCallbackClass));
         }
+    }
+
+    private static boolean isMainThread() {
+        return Thread.currentThread() == Looper.getMainLooper().getThread();
     }
 
 }

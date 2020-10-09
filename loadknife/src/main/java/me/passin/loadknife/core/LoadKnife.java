@@ -1,11 +1,12 @@
 package me.passin.loadknife.core;
 
-import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
 import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
+import java.util.Map;
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.core.target.ActivityTargetAdapter;
 import me.passin.loadknife.core.target.TargetAdapter;
@@ -15,7 +16,7 @@ import static me.passin.loadknife.utils.Preconditions.checkNotNull;
 /**
  * @author: zbb 33775
  * @date: 2019/3/19 15:17
- * @desc: 可自行选择在外部定义一个容器去管理多个 LoadKnife。
+ * @desc: 灵活配置 App 级、Module 级、View 级的 LoadKnife 对象。
  */
 public class LoadKnife {
 
@@ -35,6 +36,8 @@ public class LoadKnife {
      */
     @Nullable
     final Class<? extends Callback> mErrorCallback;
+    @NonNull
+    final Map<Class<? extends Callback>, Callback> mCallbackMap;
     /**
      * 视图切换容器视图是否能够使子 View 的 Id，也是兼容约束或相对布局的关键。
      */
@@ -54,6 +57,7 @@ public class LoadKnife {
         this.mErrorCallback = builder.mErrorCallback;
         this.mDefaultCallback = builder.mDefaultCallback;
         this.mIsEnableUseChildViewId = builder.mIsEnableUseChildViewId;
+        this.mCallbackMap = builder.callbackMap;
     }
 
     public static LoadKnife getDefault() {
@@ -65,22 +69,6 @@ public class LoadKnife {
             }
         }
         return mLoadKnife;
-    }
-
-    /**
-     * 主要适用于构造函数含有参数的 callback，多次添加会覆盖。
-     * 无参 Callback 可选择不添加，内部会通过懒加载反射初始化。
-     */
-    @MainThread
-    public static Callback addCallback(@NonNull Callback callback) {
-        checkNotNull(callback, "callback == null");
-        return LoadLayout.addCallback(callback);
-    }
-
-    @MainThread
-    public static Callback removeCallback(@NonNull Class<? extends Callback> callbackClass) {
-        checkNotNull(callbackClass, "callback == null");
-        return LoadLayout.removeCallback(callbackClass);
     }
 
     public LoadService register(@NonNull Object target) {
@@ -140,6 +128,7 @@ public class LoadKnife {
     public static class Builder {
 
         private List<CallbackAdapter> mCallbackAdapters;
+        private Map<Class<? extends Callback>, Callback> callbackMap = new ArrayMap<>();
         private List<TargetAdapter> mTargetAdapters = new ArrayList<>(5);
         private Class<? extends Callback> mDefaultCallback;
         private Class<? extends Callback> mErrorCallback;
@@ -165,6 +154,16 @@ public class LoadKnife {
         public Builder defaultCallback(@NonNull Class<? extends Callback> defaultCallback) {
             checkNotNull(defaultCallback, "defaultCallback == null");
             mDefaultCallback = defaultCallback;
+            return this;
+        }
+
+        /**
+         * 主要适用于构造函数含有参数的 callback，多次添加会覆盖。
+         * 无参 Callback 可选择不添加，内部会通过懒加载反射初始化。
+         */
+        public Builder addCallback(@NonNull Callback callback) {
+            checkNotNull(callback, "callback == null");
+            callbackMap.put(callback.getClass(), callback);
             return this;
         }
 
