@@ -23,7 +23,7 @@ android {
 
 dependencies {
     implementation rootProject.ext.appCompat
-//    implementation 'me.passin:loadknife:1.5.0'
+//    implementation 'me.passin:loadknife:1.5.1'
     implementation project(':loadknife')
     implementation('com.airbnb.android:lottie:3.4.0')
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
