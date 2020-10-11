@@ -2,6 +2,7 @@ package me.passin.loadknife.sample.view;
 
 import android.os.Bundle;
 import android.view.View;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import me.passin.loadknife.callback.Callback;
@@ -27,17 +28,17 @@ public class ConvertorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_content);
         mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
             @Override
-            public void onReload(Callback callback, View v) {
+            public void onReload(@NonNull Callback callback,@NonNull View v) {
                 mLoadService.showCallback(ViewState.UNKNOWN);
-                PostUtil.postSuccessDelayed(mLoadService, 8000);
+                PostUtil.postSuccessDelayed(mLoadService, 4000);
             }
         });
-        PostUtil.post(new Runnable() {
+        PostUtil.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mLoadService.showCallback(ViewState.ERROR);
             }
-        });
+        }, 2000);
     }
 
 }
