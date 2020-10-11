@@ -18,26 +18,26 @@ public abstract class Callback {
      * Context 和 ViewGroup 都不可作为成员变量。
      */
     @NonNull
-    public abstract View onCreateView(Context context, @NonNull ViewGroup container);
+    public abstract View onCreateView(@NonNull Context context, @NonNull ViewGroup container);
 
     /**
      * 添加到 LoadLayout 后触发，Context 和 ViewHelper 都不可作为成员变量。
      */
-    public void onAttach(Context context, ViewHelper viewHelper) {
+    public void onAttach(@NonNull Context context, @NonNull ViewHelper viewHelper) {
 
     }
 
     /**
      * 从 LoadLayout 移除前或脱离 window 时触发，Context 和 ViewHelper 都不可作为成员变量。
      */
-    public void onDetach(Context context, ViewHelper viewHelper) {
+    public void onDetach(@NonNull Context context,@NonNull ViewHelper viewHelper) {
 
     }
 
     /**
      * @return true：拦截
      */
-    public boolean onInterceptReloadEvent(ViewHelper viewHelper) {
+    public boolean onInterceptReloadEvent(@NonNull ViewHelper viewHelper) {
         return false;
     }
 
@@ -47,7 +47,7 @@ public abstract class Callback {
 
     public interface OnReloadListener {
 
-        void onReload(Callback callback, View v);
+        void onReload(@NonNull Callback callback, @NonNull View v);
 
     }
 

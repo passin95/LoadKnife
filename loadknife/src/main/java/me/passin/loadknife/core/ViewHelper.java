@@ -3,6 +3,7 @@ package me.passin.loadknife.core;
 import android.util.SparseArray;
 import android.view.View;
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class ViewHelper {
             mViews = new SparseArray<>();
         }
         View view = mViews.get(viewId);
-        if (null == view) {
+        if (view == null) {
             view = mRootView.findViewById(viewId);
             mViews.put(viewId, view);
         }
@@ -53,6 +54,7 @@ public class ViewHelper {
         return mDataMap.get(key);
     }
 
+    @NonNull
     public View getRootView() {
         return mRootView;
     }

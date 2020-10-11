@@ -88,7 +88,8 @@ public class LoadLayout extends FrameLayout {
     }
 
     @MainThread
-    public ViewHelper getViewHelper(Class<? extends Callback> callbackClass) {
+    @NonNull
+    public ViewHelper getViewHelper(@NonNull Class<? extends Callback> callbackClass) {
         ViewHelper viewHelper = mServiceViewMap.get(callbackClass);
         if (viewHelper == null) {
             final Callback callback = getCallback(callbackClass);

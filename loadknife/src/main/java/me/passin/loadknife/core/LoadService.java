@@ -2,7 +2,6 @@ package me.passin.loadknife.core;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import me.passin.loadknife.callback.Callback;
 import me.passin.loadknife.callback.Callback.OnReloadListener;
 import me.passin.loadknife.callback.SuccessCallback;
@@ -53,22 +52,18 @@ public class LoadService {
     /**
      * 当传入的 state 无法被转换为 Callback 时 返回 null。
      */
-    @Nullable
+    @NonNull
     public ViewHelper getViewHelper(@NonNull Object state) {
-        Class<? extends Callback> callback = mLoadKnife.callbackAdapter(state);
-
-        if (callback != null) {
-            return mLoadLayout.getViewHelper(callback);
-        }
-        return null;
+        return mLoadLayout.getViewHelper(mLoadKnife.callbackAdapter(state));
     }
 
-    @Nullable
+    @NonNull
     @MainThread
     public ViewHelper getViewHelper(@NonNull Class<? extends Callback> callback) {
         return mLoadLayout.getViewHelper(callback);
     }
 
+    @NonNull
     public LoadLayout getLoadLayout() {
         return mLoadLayout;
     }

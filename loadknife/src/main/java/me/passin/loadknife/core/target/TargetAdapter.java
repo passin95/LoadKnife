@@ -1,5 +1,7 @@
 package me.passin.loadknife.core.target;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import me.passin.loadknife.core.LoadKnife;
 import me.passin.loadknife.core.LoadLayout;
 
@@ -10,6 +12,7 @@ import me.passin.loadknife.core.LoadLayout;
  */
 public interface TargetAdapter {
 
-    LoadLayout adapt(LoadKnife loadKnife, Object target) throws Exception;
+    @Nullable
+    LoadLayout adapt(@NonNull LoadKnife loadKnife, @NonNull Object target) throws Exception;
 
 }

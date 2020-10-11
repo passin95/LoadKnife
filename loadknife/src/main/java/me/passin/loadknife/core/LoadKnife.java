@@ -85,21 +85,22 @@ public class LoadKnife {
     }
 
     @SuppressWarnings("unchecked")
+    @NonNull
     public Class<? extends Callback> callbackAdapter(Object o) {
-        if (mCallbackAdapters == null) {
-            return null;
-        }
-        for (CallbackAdapter convertor : mCallbackAdapters) {
-            try {
-                Class<? extends Callback> callBack = convertor.adapt(o);
-                if (callBack != null) {
-                    return callBack;
+        Class<? extends Callback> callback;
+        if (mCallbackAdapters != null) {
+            for (CallbackAdapter convertor : mCallbackAdapters) {
+                try {
+                    callback = convertor.adapt(o);
+                    if (callback != null) {
+                        return callback;
+                    }
+                } catch (Exception e) {
+                    // ignore
                 }
-            } catch (Exception e) {
-                // ignore
             }
         }
-        return null;
+        throw new IllegalArgumentException("Could not locate state callback adapter for " + o.getClass().getCanonicalName());
     }
 
     @NonNull
