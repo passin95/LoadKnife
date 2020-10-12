@@ -30,7 +30,7 @@ public abstract class Callback {
     /**
      * 从 LoadLayout 移除前或脱离 window 时触发，Context 和 ViewHelper 都不可作为成员变量。
      */
-    public void onDetach(@NonNull Context context,@NonNull ViewHelper viewHelper) {
+    public void onDetach(@NonNull Context context, @NonNull ViewHelper viewHelper) {
 
     }
 

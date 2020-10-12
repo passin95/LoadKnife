@@ -22,6 +22,7 @@ public class ViewHelper {
         mRootView = view;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends View> T getView(@IdRes int viewId) {
         if (mViews == null) {
             mViews = new SparseArray<>();

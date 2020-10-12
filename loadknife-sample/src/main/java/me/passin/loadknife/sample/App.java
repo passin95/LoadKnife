@@ -3,7 +3,6 @@ package me.passin.loadknife.sample;
 import android.app.Application;
 import android.os.StrictMode;
 import me.passin.loadknife.core.LoadKnife;
-import me.passin.loadknife.sample.callback.ErrorCallback;
 import me.passin.loadknife.sample.callback.LoadingCallback;
 import me.passin.loadknife.sample.convertor.StateConvertor;
 
@@ -20,7 +19,6 @@ public class App extends Application {
 
         LoadKnife.newBuilder()
                 .defaultCallback(LoadingCallback.class)
-                .errorCallback(ErrorCallback.class)
                 .addCallbackConvertor(StateConvertor.create())
                 .initializeDefault();
         StrictMode.enableDefaults();

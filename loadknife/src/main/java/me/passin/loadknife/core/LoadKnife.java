@@ -32,10 +32,8 @@ public class LoadKnife {
     @Nullable
     private final Class<? extends Callback> mDefaultCallback;
     /**
-     * 内部抛出可控异常时展示的页面，例如 Convertor 转换失败。
+     * callback 容器。
      */
-    @Nullable
-    final Class<? extends Callback> mErrorCallback;
     @NonNull
     final Map<Class<? extends Callback>, Callback> mCallbackMap;
     /**
@@ -54,7 +52,6 @@ public class LoadKnife {
             this.mCallbackAdapters = null;
         }
         this.mTargetAdapters = unmodifiableList(builder.mTargetAdapters);
-        this.mErrorCallback = builder.mErrorCallback;
         this.mDefaultCallback = builder.mDefaultCallback;
         this.mIsEnableUseChildViewId = builder.mIsEnableUseChildViewId;
         this.mCallbackMap = builder.callbackMap;
@@ -86,7 +83,7 @@ public class LoadKnife {
 
     @SuppressWarnings("unchecked")
     @NonNull
-    public Class<? extends Callback> callbackAdapter(Object o) {
+    Class<? extends Callback> callbackAdapter(@NonNull Object o) {
         Class<? extends Callback> callback;
         if (mCallbackAdapters != null) {
             for (CallbackAdapter convertor : mCallbackAdapters) {
@@ -104,7 +101,7 @@ public class LoadKnife {
     }
 
     @NonNull
-    public LoadLayout targetAdapter(Object target) {
+    LoadLayout targetAdapter(Object target) {
         for (TargetAdapter targetAdapter : mTargetAdapters) {
             try {
                 LoadLayout loadLayout = targetAdapter.adapt(this, target);
@@ -132,7 +129,6 @@ public class LoadKnife {
         private Map<Class<? extends Callback>, Callback> callbackMap = new ArrayMap<>();
         private List<TargetAdapter> mTargetAdapters = new ArrayList<>(5);
         private Class<? extends Callback> mDefaultCallback;
-        private Class<? extends Callback> mErrorCallback;
         private boolean mIsEnableUseChildViewId = true;
 
         {
@@ -165,15 +161,6 @@ public class LoadKnife {
         public Builder addCallback(@NonNull Callback callback) {
             checkNotNull(callback, "callback == null");
             callbackMap.put(callback.getClass(), callback);
-            return this;
-        }
-
-        /**
-         * 内部抛出可控异常显示的界面，不设置则默认不处理。
-         */
-        public Builder errorCallback(@NonNull Class<? extends Callback> errorCallback) {
-            checkNotNull(errorCallback, "errorCallback == null");
-            mErrorCallback = errorCallback;
             return this;
         }
 

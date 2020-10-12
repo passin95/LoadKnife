@@ -1,5 +1,7 @@
 package me.passin.loadknife.core;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import me.passin.loadknife.callback.Callback;
 
 /**
@@ -9,6 +11,7 @@ import me.passin.loadknife.callback.Callback;
  */
 public interface CallbackAdapter<T> {
 
-    Class<? extends Callback> adapt(T value) throws Exception;
+    @Nullable
+    Class<? extends Callback> adapt(@NonNull T value) throws Exception;
 
 }

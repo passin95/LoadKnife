@@ -37,12 +37,7 @@ public class LoadService {
     }
 
     public void showCallback(@NonNull Object state) {
-        Class<? extends Callback> callback = mLoadKnife.callbackAdapter(state);
-        if (callback != null) {
-            mLoadLayout.showCallback(callback);
-        } else {
-            mLoadLayout.showCallback(mLoadKnife.mErrorCallback);
-        }
+        mLoadLayout.showCallback(mLoadKnife.callbackAdapter(state));
     }
 
     public void showCallback(@NonNull Class<? extends Callback> callback) {
