@@ -35,6 +35,7 @@ public class SampleActivity extends AppCompatActivity {
                 PostUtil.postSuccessDelayed(mLoadService);
             }
         });
+        mLoadService.showDefault();
         PostUtil.postCallbackDelayed(mLoadService, ErrorCallback.class);
         ViewHelper rootViewHelper = mLoadService.getViewHelper(ErrorCallback.class);
         TextView tvErrorHint = rootViewHelper.getView(R.id.tv_error_hint);

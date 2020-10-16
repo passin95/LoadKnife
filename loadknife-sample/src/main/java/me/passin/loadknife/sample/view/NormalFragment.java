@@ -41,6 +41,7 @@ public class NormalFragment extends Fragment {
                 // 重新加载逻辑
             }
         });
+        loadService.showDefault();
         return loadService.getLoadLayout();
     }
 

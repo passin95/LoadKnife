@@ -33,6 +33,7 @@ public class ConvertorActivity extends AppCompatActivity {
                 PostUtil.postSuccessDelayed(mLoadService, 4000);
             }
         });
+        mLoadService.showDefault();
         PostUtil.postDelayed(new Runnable() {
             @Override
             public void run() {

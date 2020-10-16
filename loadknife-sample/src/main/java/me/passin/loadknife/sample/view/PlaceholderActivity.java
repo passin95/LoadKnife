@@ -28,6 +28,7 @@ public class PlaceholderActivity extends AppCompatActivity {
                 //do retry logic...
             }
         });
+        loadService.showDefault();
         PostUtil.postSuccessDelayed(loadService, 1000);
     }
 

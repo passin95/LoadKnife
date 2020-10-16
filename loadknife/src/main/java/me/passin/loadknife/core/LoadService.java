@@ -23,7 +23,6 @@ public class LoadService {
         mDefaultCallback = defaultCallback;
         mLoadLayout = mLoadKnife.targetAdapter(target);
         mLoadLayout.setOnReloadListener(onReloadListener);
-        showDefault();
     }
 
     public void showDefault() {

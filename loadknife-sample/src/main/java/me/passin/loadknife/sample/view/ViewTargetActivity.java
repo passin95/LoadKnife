@@ -34,6 +34,7 @@ public class ViewTargetActivity extends AppCompatActivity {
                 PostUtil.postSuccessDelayed(loadService);
             }
         });
+        loadService.showDefault();
         PostUtil.postCallbackDelayed(loadService, TimeoutCallback.class);
     }
 

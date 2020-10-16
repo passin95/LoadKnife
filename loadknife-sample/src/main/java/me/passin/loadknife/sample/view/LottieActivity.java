@@ -31,6 +31,7 @@ public class LottieActivity extends AppCompatActivity {
                 PostUtil.postSuccessDelayed(loadService, 8000);
             }
         });
+        loadService.showDefault();
         PostUtil.postCallbackDelayed(loadService, LottieEmptyCallback.class);
     }
 
