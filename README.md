@@ -17,8 +17,6 @@ LoadKnife.newBuilder()
         .addCallback(new TimeoutCallback())
         // 替换后默认显示视图
         .defaultCallback(LoadingCallback.class)
-        // 转换失败时显示的视图
-        .errorCallback(ErrorCallback.class)
         // 类型转换器
         .addConvertor(StateConvertor.create())
         // 初始化默认的 LoadKnife 对象，可调用 build() 构建一个新的 LoadKnife。
@@ -30,34 +28,35 @@ LoadKnife.newBuilder()
 ```java
 public class AnimateCallback extends Callback {
 
-     @Override
-     public int getLayoutId() {
-         return R.layout.callback_animate;
-     }
+    @NonNull
+    @Override
+    public View onCreateView(Context context, @Nullable ViewGroup container) {
+        return LayoutInflater.from(context).inflate(R.layout.callback_animate, container, false);
+    }
 
-     @Override
-     public void onAttach(Context context, ViewHelper viewHelper) {
-         View animateView = viewHelper.getView(R.id.view_animate);
-         Animation animation = new RotateAnimation(0, 359, Animation.RELATIVE_TO_SELF,
-                 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-         animation.setDuration(1000);
-         animation.setRepeatCount(Integer.MAX_VALUE);
-         animation.setFillAfter(true);
-         animation.setInterpolator(new LinearInterpolator());
-         animateView.startAnimation(animation);
-         Toast.makeText(context.getApplicationContext(), "start animation", Toast.LENGTH_SHORT).show();
-     }
+    @Override
+    public void onAttach(Context context, ViewHelper viewHelper) {
+        View animateView = viewHelper.getView(R.id.view_animate);
+        Animation animation = new RotateAnimation(0, 359, Animation.RELATIVE_TO_SELF,
+                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(1000);
+        animation.setRepeatCount(Integer.MAX_VALUE);
+        animation.setFillAfter(true);
+        animation.setInterpolator(new LinearInterpolator());
+        animateView.startAnimation(animation);
+        Toast.makeText(context.getApplicationContext(), "start animation", Toast.LENGTH_SHORT).show();
+    }
 
-     @Override
-     public void onDetach(Context context, ViewHelper viewHelper) {
-         View animateView = viewHelper.getView(R.id.view_animate);
-         if (animateView != null) {
-             animateView.clearAnimation();
-             Toast.makeText(context.getApplicationContext(), "stop animation", Toast.LENGTH_SHORT).show();
-         }
-     }
+    @Override
+    public void onDetach(Context context, ViewHelper viewHelper) {
+        View animateView = viewHelper.getView(R.id.view_animate);
+        if (animateView != null) {
+            animateView.clearAnimation();
+            Toast.makeText(context.getApplicationContext(), "stop animation", Toast.LENGTH_SHORT).show();
+        }
+    }
 
- }
+}
 ```
 
 ### 动态修改界面
@@ -69,7 +68,7 @@ mLoadService = LoadKnife.getDefault().register(this, new OnReloadListener() {
         // 重新加载逻辑
     }
 })
-// 修改 view
+// 修改 view，需要注意的是最好是要显示前再修改，因为调用 getViewHelper 后，会直接创建相应的视图对象。
 ViewHelper viewHelper = mLoadService.getViewHelper(EmptyCallback.class);
 ```
 
